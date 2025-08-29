@@ -1,0 +1,38 @@
+<!-- Add this below your #trackList div -->
+<h1>🎬 My Video Player</h1>
+
+<div id="videoList">
+  <div class="track" data-name="Sample Video">
+    <span class="name">Sample Video</span>
+    <video id="video1" controls width="300">
+      <source src="videos/মানুষ চিনতে শিখুন.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <input type="range" class="volume" min="0" max="1" step="0.01" onchange="setVideoVolume('video1', this.value)">
+    <span class="duration" id="videoDuration1">--:--</span>
+    <div class="loop-icon" onclick="toggleVideoLoop('video1', this)">🔁</div>
+  </div>
+</div>
+
+<script>
+  // Handle video durations
+  const allVideos = Array.from(document.querySelectorAll('video'));
+
+  allVideos.forEach(video => {
+    video.addEventListener('loadedmetadata', () => {
+      const id = video.id.replace('video', 'videoDuration');
+      document.getElementById(id).textContent = formatTime(video.duration);
+    });
+  });
+
+  function setVideoVolume(id, value) {
+    const video = document.getElementById(id);
+    video.volume = value;
+  }
+
+  function toggleVideoLoop(id, icon) {
+    const video = document.getElementById(id);
+    video.loop = !video.loop;
+    icon.classList.toggle('active', video.loop);
+  }
+</script>
