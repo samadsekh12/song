@@ -1,38 +1,67 @@
-<!-- Add this below your #trackList div -->
-<h1>🎬 My Video Player</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple Video Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    video {
+      max-width: 100%;
+      border: 2px solid #444;
+      border-radius: 8px;
+      background: #000;
+    }
+    button {
+      margin-top: 12px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
 
-<div id="videoList">
-  <div class="track" data-name="Sample Video">
-    <span class="name">Sample Video</span>
-    <video id="video1" controls width="300">
-      <source src="videos/মানুষ চিনতে শিখুন.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    <input type="range" class="volume" min="0" max="1" step="0.01" onchange="setVideoVolume('video1', this.value)">
-    <span class="duration" id="videoDuration1">--:--</span>
-    <div class="loop-icon" onclick="toggleVideoLoop('video1', this)">🔁</div>
-  </div>
-</div>
+  <h1>My Video Player</h1>
 
-<script>
-  // Handle video durations
-  const allVideos = Array.from(document.querySelectorAll('video'));
+  <!-- HTML5 video element -->
+  <video id="myVideo" width="640" height="360" controls>
+    <source src="মানুষ চিনতে শিখুন.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
-  allVideos.forEach(video => {
-    video.addEventListener('loadedmetadata', () => {
-      const id = video.id.replace('video', 'videoDuration');
-      document.getElementById(id).textContent = formatTime(video.duration);
+  <!-- Custom play button -->
+  <button id="playBtn">Play Video</button>
+
+  <script>
+    const video = document.getElementById('myVideo');
+    const playBtn = document.getElementById('playBtn');
+
+    playBtn.addEventListener('click', () => {
+      if (video.paused) {
+        video.play();
+        playBtn.textContent = 'Pause Video';
+      } else {
+        video.pause();
+        playBtn.textContent = 'Play Video';
+      }
     });
-  });
+  </script>
 
-  function setVideoVolume(id, value) {
-    const video = document.getElementById(id);
-    video.volume = value;
-  }
-
-  function toggleVideoLoop(id, icon) {
-    const video = document.getElementById(id);
-    video.loop = !video.loop;
-    icon.classList.toggle('active', video.loop);
-  }
-</script>
+</body>
+</html>
