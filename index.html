@@ -1,79 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Custom Video Player</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple Video Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    video {
+      max-width: 100%;
+      border: 2px solid #444;
+      border-radius: 8px;
+      background: #000;
+    }
+    button {
+      margin-top: 12px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
+  </style>
 </head>
 <body>
-  <main class="app">
-    <section class="player" id="playerContainer">
-      <!-- Video tag now has a playable source -->
-      <video id="video" preload="metadata" playsinline poster="poster.jpg">
-        <source src="Video/মানুষ চিনতে শিখুন.mp4" type="video/mp4">
-        <source src="media/sample.webm" type="video/webm">
-        <track src="media/sample.vtt" kind="subtitles" srclang="en" label="English">
-        Your browser does not support HTML5 video.
-      </video>
 
-      <div class="controls" role="group" aria-label="Video controls">
-        <button id="playPause" aria-label="Play">▶️</button>
-        <button id="back" aria-label="Rewind 10 seconds">⏪ 10s</button>
-        <button id="forward" aria-label="Forward 10 seconds">10s ⏩</button>
+  <h1>My Video Player</h1>
 
-        <div class="time">
-          <span id="currentTime">00:00</span> /
-          <span id="duration">00:00</span>
-        </div>
+  <!-- HTML5 video element -->
+  <video id="myVideo" width="640" height="360" controls>
+    <source src="Video/মানুষ চিনতে শিখুন.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
-        <input
-          id="progress"
-          type="range"
-          min="0"
-          max="100"
-          value="0"
-          step="0.1"
-          aria-label="Seek"
-        />
+  <!-- Custom play button -->
+  <button id="playBtn">Play Video</button>
 
-        <button id="mute" aria-label="Mute">🔈</button>
-        <input
-          id="volume"
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value="1"
-          aria-label="Volume"
-        />
+  <script>
+    const video = document.getElementById('myVideo');
+    const playBtn = document.getElementById('playBtn');
 
-        <label class="speed-label">
-          <span class="visually-hidden">Playback speed</span>
-          <select id="speed" aria-label="Playback speed">
-            <option value="0.5">0.5×</option>
-            <option value="0.75">0.75×</option>
-            <option value="1" selected>1×</option>
-            <option value="1.25">1.25×</option>
-            <option value="1.5">1.5×</option>
-            <option value="2">2×</option>
-          </select>
-        </label>
+    playBtn.addEventListener('click', () => {
+      if (video.paused) {
+        video.play();
+        playBtn.textContent = 'Pause Video';
+      } else {
+        video.pause();
+        playBtn.textContent = 'Play Video';
+      }
+    });
+  </script>
 
-        <button id="cc" aria-label="Toggle captions">CC</button>
-        <button id="fullscreen" aria-label="Fullscreen">⛶</button>
-      </div>
-    </section>
-
-    <aside class="playlist">
-      <h2>Playlist</h2>
-      <ul id="playlist" role="listbox" aria-label="Video playlist"></ul>
-      <p class="hint">
-        Tip: Space = Play/Pause, F = Fullscreen, M = Mute, C = Captions, 0–9 = Seek %
-      </p>
-    </aside>
-  </main>
-
-  <script src="script.js"></script>
 </body>
 </html>
