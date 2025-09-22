@@ -21,24 +21,45 @@
     h1 { margin:0 0 6px; font-size:20px; }
     p.lead { margin:0 0 12px; color:#444; }
 
-    /* Instruction box (top-right) with RTL; first line warning in strong red,
-       the rest yellow-styled. Overall box has red border but inner parts styled. */
+    /* Instruction wrap (top-right) */
     .instrWrap{
       direction: rtl;           /* right-to-left rendering */
       text-align: right;
-      min-width:260px;
+      min-width:320px;
       border-radius:8px;
       border:1px solid var(--red-border);
       overflow:hidden;
       order:3;
     }
-    .instrWarning{
+
+    /* Animated RTL running warning line (red) */
+    .marqueeBox{
       background:var(--red-bg);
       color:var(--red-text);
-      padding:10px 12px;
+      padding:8px 12px;
       font-weight:700;
       border-bottom:1px solid var(--red-border);
+      position:relative;
+      height:38px;
+      display:flex;
+      align-items:center;
+      overflow:hidden;
     }
+    .marquee {
+      display:inline-block;
+      white-space:nowrap;
+      position:absolute;
+      right: -100%;
+      transform: translateX(0);
+      animation: scrollRTL 12s linear infinite;
+      font-size:15px;
+      direction: rtl;
+    }
+    @keyframes scrollRTL{
+      0% { right: -100%; }
+      100% { right: 100%; }
+    }
+
     .instrBody{
       background:var(--yellow-bg);
       color:var(--yellow-text);
@@ -70,6 +91,8 @@
       .topBar { flex-direction:column; align-items:flex-start; }
       .instrWrap { order:1; direction:ltr; text-align:left; width:100%; }
       .timer { margin-left:0; }
+      .marquee { animation: scrollRTL 10s linear infinite; right: -100%; }
+      .marqueeBox { height:auto; padding:10px; }
     }
   </style>
 </head>
@@ -81,12 +104,12 @@
         <p class="lead">সময়: <strong>৩০ মিনিট</strong>. নিচের সব প্রশ্নে উত্তর দিয়ে Submit চাপুন; সময় শেষ হলে স্বয়ংক্রিয় সাবমিট হবে।</p>
       </div>
 
-      <!-- Instruction box: top-right, RTL. First line warning (red), rest in yellow style.
-           Updated per request: replace body text with the new Bangla warning line. -->
+      <!-- Instruction box: top-right with animated RTL red warning line -->
       <div class="instrWrap" aria-live="polite">
-        <div class="instrWarning">সতর্কবার্তা: ishtayak boleche mam ke sob bolte hobe</div>
+        <div class="marqueeBox" aria-hidden="false">
+          <div class="marquee">ishtayak boleche mam ke sob bolte hobe</div>
+        </div>
         <div class="instrBody">
-          <!-- Optional additional short note in yellow style (can be removed if not needed) -->
           টেস্ট চালুর নিয়ম: স্টার্ট করলে টাইমার চলবে এবং ৩০ মিনিটে স্বয়ংক্রিয় সাবমিট হবে।
         </div>
       </div>
