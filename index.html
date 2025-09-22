@@ -5,41 +5,94 @@
   <title>WBSSC Group C/D Math MCQ (30) — Test</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body { font-family: "Noto Sans Bengali", Roboto, Arial, sans-serif; line-height:1.5; padding:20px; background:#f7f7f8; color:#111; }
-    h1 { margin:0 0 8px; font-size:20px; }
-    p.lead { margin:0 0 18px; color:#444; }
-    .timer { font-weight:700; font-size:18px; color:#0b5; float:right; }
-    .container { max-width:900px; margin:0 auto; background:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.06); }
-    .question { margin:14px 0; padding:10px; border-radius:6px; background:#fbfcff; border:1px solid #eef; }
+    :root{
+      --red-bg:#f8d7da;
+      --red-border:#f5c6cb;
+      --red-text:#721c24;
+      --yellow-bg:#fff3cd;
+      --yellow-border:#ffeeba;
+      --yellow-text:#856404;
+      --good:#2ecc71;
+      --bad:#e74c3c;
+    }
+    body { font-family: "Noto Sans Bengali", Roboto, Arial, sans-serif; line-height:1.5; padding:18px; background:#f7f7f8; color:#111; }
+    .container { max-width:980px; margin:12px auto; background:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.06); }
+    .topBar { display:flex; gap:12px; align-items:flex-start; }
+    h1 { margin:0 0 6px; font-size:20px; }
+    p.lead { margin:0 0 12px; color:#444; }
+
+    /* Instruction box (top-right) with RTL; first line warning in strong red,
+       the rest yellow-styled. Overall box has red border but inner parts styled. */
+    .instrWrap{
+      direction: rtl;           /* right-to-left rendering */
+      text-align: right;
+      min-width:260px;
+      border-radius:8px;
+      border:1px solid var(--red-border);
+      overflow:hidden;
+      order:3;
+    }
+    .instrWarning{
+      background:var(--red-bg);
+      color:var(--red-text);
+      padding:10px 12px;
+      font-weight:700;
+      border-bottom:1px solid var(--red-border);
+    }
+    .instrBody{
+      background:var(--yellow-bg);
+      color:var(--yellow-text);
+      padding:10px 12px;
+      font-size:13px;
+    }
+
+    .timer { font-weight:700; font-size:18px; color:#0b5; margin-left:auto; }
+
+    .question { margin:14px 0; padding:12px; border-radius:6px; background:#fbfcff; border:1px solid #eef; }
     .qtext { font-weight:600; margin-bottom:8px; }
     .options label { display:block; margin:6px 0; padding:8px; border-radius:6px; border:1px solid transparent; cursor:pointer; }
     input[type="radio"] { margin-right:8px; }
+
     .controls { margin:18px 0 8px; display:flex; gap:12px; align-items:center; }
     button { padding:10px 14px; border-radius:6px; border:0; background:#0b79d0; color:#fff; cursor:pointer; }
     button:disabled { opacity:0.6; cursor:not-allowed; }
+
     .result { margin-top:12px; font-weight:700; }
-    .correct { background: #e6f9ea; border-color:#7be08f; }
-    .wrong { background: #fff0f0; border-color:#ff9b9b; opacity:0.95; }
-    .answerLabel { display:block; margin-top:6px; font-size:13px; color:#333; }
+    .correct { background: #e6f9ea; border-color:var(--good); }
+    .wrong { background: #fff0f0; border-color:var(--bad); opacity:0.97; }
+
     .note { margin-top:10px; color:#666; font-size:13px; }
     .legend { display:flex; gap:12px; margin-top:10px; align-items:center; }
     .legend span { padding:6px 10px; border-radius:6px; font-size:13px; color:#fff; }
-    .lg-c { background:#2ecc71 } .lg-w { background:#e74c3c }
+    .lg-c { background:var(--good) } .lg-w { background:var(--bad) }
+
+    @media (max-width:760px) {
+      .topBar { flex-direction:column; align-items:flex-start; }
+      .instrWrap { order:1; direction:ltr; text-align:left; width:100%; }
+      .timer { margin-left:0; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div style="display:flex;align-items:flex-start;gap:12px;">
+    <div class="topBar">
       <div style="flex:1">
         <h1>WBSSC Group C/D গণিত MCQ — ৩০টি</h1>
-        <p class="lead">সময়: <strong>৩০ মিনিট</strong>. নিচের সব প্রশ্নে উত্তর দিন এবং Submit চাপুন। ঠিক উত্তর গুলো সবুজে, ভুলগুলো লাল হবে এবং স্কোর দেখানো হবে।</p>
+        <p class="lead">সময়: <strong>৩০ মিনিট</strong>. নিচের সব প্রশ্নে উত্তর দিয়ে Submit চাপুন; সময় শেষ হলে স্বয়ংক্রিয় সাবমিট হবে।</p>
       </div>
+
+      <!-- Instruction box: top-right, RTL. First line warning (red), rest in yellow style -->
+      <div class="instrWrap" aria-live="polite">
+        <div class="instrWarning">সতর্কবার্তা: এই টেস্ট চালালে ৩০ মিনিটের পর স্বয়ংক্রিয় সাবমিট হবে</div>
+        <div class="instrBody">
+          মামাকে বলবেন: "আপনি চাইলে এই টেস্টটি চালাতে পারবেন। টাইমার শুরু হলে ৩০ মিনিটে স্বয়ংক্রিয় সাবমিট হবে। ব্যবহারকারী যখন Submit করবে, তখন ঠিক উত্তর সবুজে এবং ভুল উত্তর লাল রঙে দেখাবে; পুরো স্কোর নিচে প্রদর্শিত হবে।"
+        </div>
+      </div>
+
       <div class="timer" id="timer">30:00</div>
     </div>
 
-    <form id="quizForm">
-      <!-- Questions inserted by script -->
-    </form>
+    <form id="quizForm"></form>
 
     <div class="controls">
       <button id="submitBtn" type="button">Submit</button>
@@ -51,14 +104,13 @@
     </div>
 
     <div class="result" id="resultArea" aria-live="polite"></div>
-    <p class="note">প্রথমে নিজে চেষ্টার পর Submit চাপো। টাইম শেষ হলে স্বয়ংক্রিয় Submit হবে।</p>
+    <p class="note">প্রথমে নিজে চেষ্টা করে নাও; টাইম শেষ হলে স্বয়ংক্রিয়ভাবে সাবমিট হবে।</p>
   </div>
 
   <script>
-    // Questions + options + correct answers (keys match earlier answer key)
     const questions = [
-      { q: "1. 25% of 240 কত?", opts: ["40","50","60","45"], a: 2 }, // C
-      { q: "2. 7 + 13 × 2 = ?", opts: ["40","33","27","20"], a: 1 }, // B (order: A0 B1 C2 D3)
+      { q: "1. 25% of 240 কত?", opts: ["40","50","60","45"], a: 2 },
+      { q: "2. 7 + 13 × 2 = ?", opts: ["40","33","27","20"], a: 1 },
       { q: "3. 3/4 + 1/8 = ?", opts: ["7/8","1","5/8","11/8"], a: 0 },
       { q: "4. 15 এবং 20 এর HCF =", opts: ["1","3","5","15"], a: 2 },
       { q: "5. 9 × 9 = ?", opts: ["72","81","91","69"], a: 1 },
@@ -91,7 +143,6 @@
       { q: "30. 1200 টাকার পণ্য 25% লাভে বিক্রি করলে বিক্রয় মূল্য কত হবে?", opts: ["1500","1400","1600","1250"], a: 0 }
     ];
 
-    // Render questions
     const form = document.getElementById('quizForm');
     questions.forEach((item, idx) => {
       const div = document.createElement('div');
@@ -124,23 +175,18 @@
       let correct = 0;
       questions.forEach((item, idx) => {
         const qdiv = document.getElementById('q' + (idx+1));
-        // clear classes
-        qdiv.classList.remove('correct','wrong');
-        // find selected
+        qdiv.querySelectorAll('label').forEach(l => l.classList.remove('correct','wrong'));
         const sel = form.querySelector(`input[name="q${idx}"]:checked`);
         const selVal = sel ? Number(sel.value) : null;
         if (selVal === item.a) {
           correct++;
-          // mark correct option green
           const label = qdiv.querySelector(`#q${idx}_o${selVal}`).closest('label');
           label.classList.add('correct');
         } else {
-          // mark selected wrong (if any)
           if (selVal !== null) {
             const sLabel = qdiv.querySelector(`#q${idx}_o${selVal}`).closest('label');
             sLabel.classList.add('wrong');
           }
-          // highlight correct option
           const cLabel = qdiv.querySelector(`#q${idx}_o${item.a}`).closest('label');
           cLabel.classList.add('correct');
         }
@@ -148,29 +194,21 @@
 
       resultArea.textContent = `তোমার স্কোর: ${correct} / ${questions.length}`;
       if (auto) resultArea.textContent += " (টাইম শেষ হয়ে স্বয়ংক্রিয় সাবমিট)";
-      // scroll to result
-      resultArea.scrollIntoView({behavior:'smooth', block:'center'});
-      // disable further changes
       Array.from(form.querySelectorAll('input')).forEach(i => i.disabled = true);
       submitBtn.disabled = true;
     }
 
     submitBtn.addEventListener('click', () => grade(false));
     resetBtn.addEventListener('click', () => {
-      // reset form and UI
       form.reset();
       resultArea.textContent = '';
-      Array.from(form.querySelectorAll('label')).forEach(l => {
-        l.classList.remove('correct','wrong');
-      });
+      Array.from(form.querySelectorAll('label')).forEach(l => l.classList.remove('correct','wrong'));
       Array.from(form.querySelectorAll('input')).forEach(i => i.disabled = false);
       submitBtn.disabled = false;
-      // reset timer
       clearInterval(timerInterval);
       startTimer(30*60);
     });
 
-    // Timer
     const timerEl = document.getElementById('timer');
     let timerInterval;
     function startTimer(seconds) {
@@ -181,7 +219,6 @@
         timerEl.textContent = `${m}:${s}`;
         if (remaining <= 0) {
           clearInterval(timerInterval);
-          // auto submit
           grade(true);
         }
         remaining--;
@@ -189,11 +226,8 @@
       update();
       timerInterval = setInterval(update, 1000);
     }
-
-    // start 30 minutes
     startTimer(30*60);
 
-    // prevent accidental unload
     window.addEventListener('beforeunload', (e) => {
       if (!submitBtn.disabled) {
         e.preventDefault();
