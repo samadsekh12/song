@@ -2,263 +2,407 @@
 <html lang="bn">
 <head>
   <meta charset="utf-8" />
-  <title>WBSSC Group C/D Math MCQ (30) — Test</title>
+  <title>Endless Bike Racer — One Page</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     :root{
-      --red-bg:#f8d7da;
-      --red-border:#f5c6cb;
-      --red-text:#721c24;
-      --yellow-bg:#fff3cd;
-      --yellow-border:#ffeeba;
-      --yellow-text:#856404;
-      --good:#2ecc71;
-      --bad:#e74c3c;
+      --bg:#0b1320;
+      --road:#2b2f36;
+      --lane:#3a3f46;
+      --accent:#ffcc00;
+      --white:#f7f7f7;
+      --danger:#ff4d4f;
+      --ui-bg: rgba(0,0,0,0.45);
     }
-    body { font-family: "Noto Sans Bengali", Roboto, Arial, sans-serif; line-height:1.5; padding:18px; background:#f7f7f8; color:#111; }
-    .container { max-width:980px; margin:12px auto; background:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.06); }
-    .topBar { display:flex; gap:12px; align-items:flex-start; }
-    h1 { margin:0 0 6px; font-size:20px; }
-    p.lead { margin:0 0 12px; color:#444; }
-
-    /* Instruction wrap (top-right) */
-    .instrWrap{
-      direction: rtl;           /* right-to-left rendering */
-      text-align: right;
-      min-width:320px;
-      border-radius:8px;
-      border:1px solid var(--red-border);
-      overflow:hidden;
-      order:3;
-    }
-
-    /* Animated RTL running warning line (red) */
-    .marqueeBox{
-      background:var(--red-bg);
-      color:var(--red-text);
-      padding:8px 12px;
-      font-weight:700;
-      border-bottom:1px solid var(--red-border);
-      position:relative;
-      height:38px;
-      display:flex;
-      align-items:center;
-      overflow:hidden;
-    }
-    .marquee {
-      display:inline-block;
-      white-space:nowrap;
-      position:absolute;
-      right: -100%;
-      transform: translateX(0);
-      animation: scrollRTL 12s linear infinite;
-      font-size:15px;
-      direction: rtl;
-    }
-    @keyframes scrollRTL{
-      0% { right: -100%; }
-      100% { right: 100%; }
-    }
-
-    .instrBody{
-      background:var(--yellow-bg);
-      color:var(--yellow-text);
-      padding:10px 12px;
-      font-size:13px;
-    }
-
-    .timer { font-weight:700; font-size:18px; color:#0b5; margin-left:auto; }
-
-    .question { margin:14px 0; padding:12px; border-radius:6px; background:#fbfcff; border:1px solid #eef; }
-    .qtext { font-weight:600; margin-bottom:8px; }
-    .options label { display:block; margin:6px 0; padding:8px; border-radius:6px; border:1px solid transparent; cursor:pointer; }
-    input[type="radio"] { margin-right:8px; }
-
-    .controls { margin:18px 0 8px; display:flex; gap:12px; align-items:center; }
-    button { padding:10px 14px; border-radius:6px; border:0; background:#0b79d0; color:#fff; cursor:pointer; }
-    button:disabled { opacity:0.6; cursor:not-allowed; }
-
-    .result { margin-top:12px; font-weight:700; }
-    .correct { background: #e6f9ea; border-color:var(--good); }
-    .wrong { background: #fff0f0; border-color:var(--bad); opacity:0.97; }
-
-    .note { margin-top:10px; color:#666; font-size:13px; }
-    .legend { display:flex; gap:12px; margin-top:10px; align-items:center; }
-    .legend span { padding:6px 10px; border-radius:6px; font-size:13px; color:#fff; }
-    .lg-c { background:var(--good) } .lg-w { background:var(--bad) }
-
-    @media (max-width:760px) {
-      .topBar { flex-direction:column; align-items:flex-start; }
-      .instrWrap { order:1; direction:ltr; text-align:left; width:100%; }
-      .timer { margin-left:0; }
-      .marquee { animation: scrollRTL 10s linear infinite; right: -100%; }
-      .marqueeBox { height:auto; padding:10px; }
-    }
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#041022 0%, #071428 60%);font-family:Inter, "Noto Sans Bengali", sans-serif;color:var(--white)}
+    .wrap{max-width:980px;margin:18px auto;padding:12px;}
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between}
+    h1{font-size:18px;margin:0}
+    .controls{display:flex;gap:8px;align-items:center}
+    button{background:var(--accent);border:0;padding:8px 12px;border-radius:8px;color:#111;cursor:pointer;font-weight:700}
+    button.secondary{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.08)}
+    .ui{display:flex;gap:12px;align-items:center}
+    .stat{background:var(--ui-bg);padding:8px 12px;border-radius:8px;font-weight:700}
+    canvas{display:block;border-radius:12px;margin-top:12px;width:100%;height:520px;background:var(--road);box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+    footer{margin-top:12px;color:rgba(255,255,255,0.6);font-size:13px;text-align:center}
+    /* responsive */
+    @media (max-width:640px){canvas{height:420px}}
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="topBar">
-      <div style="flex:1">
-        <h1>WBSSC Group C/D গণিত MCQ — ৩০টি</h1>
-        <p class="lead">সময়: <strong>৩০ মিনিট</strong>. নিচের সব প্রশ্নে উত্তর দিয়ে Submit চাপুন; সময় শেষ হলে স্বয়ংক্রিয় সাবমিট হবে।</p>
-      </div>
-
-      <!-- Instruction box: top-right with animated RTL red warning line -->
-      <div class="instrWrap" aria-live="polite">
-        <div class="marqueeBox" aria-hidden="false">
-          <div class="marquee">? ishtayak boleche mam ke sob bolte hobe</div>
+  <div class="wrap">
+    <header>
+      <h1>Endless Bike Racer (4 Lanes) — Score increases speed</h1>
+      <div class="controls">
+        <div class="ui">
+          <div class="stat" id="score">Score: 0</div>
+          <div class="stat" id="speed">Speed: 4</div>
         </div>
-        <div class="instrBody">
-          টেস্ট চালুর নিয়ম: স্টার্ট করলে টাইমার চলবে এবং ৩০ মিনিটে স্বয়ংক্রিয় সাবমিট হবে।
-        </div>
+        <button id="startBtn">Start</button>
+        <button id="pauseBtn" class="secondary">Pause</button>
+        <button id="resetBtn" class="secondary">Reset</button>
       </div>
+    </header>
 
-      <div class="timer" id="timer">30:00</div>
-    </div>
+    <canvas id="game"></canvas>
 
-    <form id="quizForm"></form>
-
-    <div class="controls">
-      <button id="submitBtn" type="button">Submit</button>
-      <button id="resetBtn" type="button">Reset</button>
-      <div style="margin-left:auto" class="legend">
-        <span class="lg-c">ঠিক</span>
-        <span class="lg-w">ভুল</span>
-      </div>
-    </div>
-
-    <div class="result" id="resultArea" aria-live="polite"></div>
-    <p class="note">প্রথমে নিজে চেষ্টা করে নাও; টাইম শেষ হলে স্বয়ংক্রিয়ভাবে সাবমিট হবে।</p>
+    <footer>Use Left / Right arrows to change lanes. Mobile: tap left/right half of canvas.</footer>
   </div>
 
   <script>
-    const questions = [
-      { q: "1. 25% of 240 কত?", opts: ["40","50","60","45"], a: 2 },
-      { q: "2. 7 + 13 × 2 = ?", opts: ["40","33","27","20"], a: 1 },
-      { q: "3. 3/4 + 1/8 = ?", opts: ["7/8","1","5/8","11/8"], a: 0 },
-      { q: "4. 15 এবং 20 এর HCF =", opts: ["1","3","5","15"], a: 2 },
-      { q: "5. 9 × 9 = ?", opts: ["72","81","91","69"], a: 1 },
-      { q: "6. ব্যাসার্ধ 7 সেমি হলে ব্যাস কত?", opts: ["7 সেমি","14 সেমি","21 সেমি","28 সেমি"], a: 1 },
-      { q: "7. 120 ÷ 5 = ?", opts: ["24","20","18","25"], a: 0 },
-      { q: "8. 2^3 = ?", opts: ["6","8","9","12"], a: 1 },
-      { q: "9. একটি সপ্তাহে কত দিন আছে?", opts: ["5","6","7","8"], a: 2 },
-      { q: "10. 100 এর 10% কত?", opts: ["1","5","10","20"], a: 2 },
+  /* -----------------------------
+     Endless 4-lane bike racing game
+     Single-file HTML/CSS/JS
+     Basic mechanics:
+       - 4 lanes horizontally
+       - player occupies one lane (bike)
+       - obstacles spawn ahead and move down (toward player)
+       - score increments over time; every threshold increases speed
+       - endless until collision
+     Controls:
+       - Left/Right arrows (desktop)
+       - Tap left/right half (mobile)
+     ----------------------------- */
 
-      { q: "11. 45% of 200 = ?", opts: ["80","90","85","95"], a: 1 },
-      { q: "12. একটি সংখ্যার 3/5 = 54 হলে সংখ্যা কত?", opts: ["60","70","90","120"], a: 2 },
-      { q: "13. 5x − 7 = 18 হলে x = ?", opts: ["5","6","7","4"], a: 0 },
-      { q: "14. ত্রিভুজের ক্ষেত্রফল 30, ভিত্তি 10 হলে উচ্চতা কত?", opts: ["6 সেমি","3 সেমি","5 সেমি","4 সেমি"], a: 0 },
-      { q: "15. 0.75 কে ভগ্নাংশে প্রকাশ করলে?", opts: ["3/4","7/10","75/100","1/4"], a: 0 },
-      { q: "16. 8 ও 12 এর LCM কত?", opts: ["12","24","48","20"], a: 1 },
-      { q: "17. 20% discount এ নতুন দাম 400 হলে মূল দাম কত ছিল?", opts: ["480","500","520","450"], a: 1 },
-      { q: "18. 3 লিটার ও 5 লিটার মিলে মোট?", opts: ["8 লিটার","15 লিটার","2 লিটার","10 লিটার"], a: 0 },
-      { q: "19. 36 = 6 × ?", opts: ["5","6","7","4"], a: 1 },
-      { q: "20. 14 এবং 21 এর গড় কত?", opts: ["16","17.5","17","15"], a: 1 },
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d', { alpha: false });
 
-      { q: "21. যদি x + 2y = 14 এবং x − y = 2, তবে x = ?", opts: ["6","4","8","10"], a: 2 },
-      { q: "22. গাড়ি 60 km/h গতি করে 3.5 ঘন্টা চললে কত কিমি?", opts: ["210 km","180 km","200 km","220 km"], a: 0 },
-      { q: "23. 5 এর log10 প্রায় কত?", opts: ["0.3010","0.6990","0.4771","1.0000"], a: 2 },
-      { q: "24. বৃত্তের ব্যাসার্ধ 14 সেমি হলে ক্ষেত্রফল (π = 22/7) = ?", opts: ["616 π সেমি^2","616 সেমি^2","(compute) 616?","616 × (22/7) সেমি^2"], a: 1 },
-      { q: "25. 3x^2 = 48 হলে ধনাত্মক x =", opts: ["4","sqrt(16) = 4","sqrt(48/3)=4","সব একই"], a: 3 },
-      { q: "26. 0.2 + 0.03 = ?", opts: ["0.23","0.203","0.5","0.023"], a: 0 },
-      { q: "27. একটি সংখ্যার 20% = 30; সংখ্যা কত?", opts: ["150","60","300","120"], a: 0 },
-      { q: "28. 7 : 49 :: 9 : ?", opts: ["81","72","63","90"], a: 0 },
-      { q: "29. 360° কে 9 ভাগ করলে এক ভাগ ?", opts: ["30°","40°","20°","45°"], a: 0 },
-      { q: "30. 1200 টাকার পণ্য 25% লাভে বিক্রি করলে বিক্রয় মূল্য কত হবে?", opts: ["1500","1400","1600","1250"], a: 0 }
-    ];
+  // sizing
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = Math.min(980, Math.max(360, rect.width)) * devicePixelRatio;
+    canvas.height = (rect.height || (520)) * devicePixelRatio;
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+  }
+  // set CSS height so boundingRect exists
+  canvas.style.height = '520px';
+  resize();
+  window.addEventListener('resize', () => { resize(); });
 
-    const form = document.getElementById('quizForm');
-    questions.forEach((item, idx) => {
-      const div = document.createElement('div');
-      div.className = 'question';
-      div.id = 'q' + (idx+1);
+  // Game variables
+  const lanes = 4;
+  let laneWidth;
+  let world = {
+    running: false,
+    paused: false,
+    score: 0,
+    speed: 4,        // base speed (pixels per tick)
+    spawnTimer: 0,
+    spawnInterval: 90, // frames
+    tick: 0,
+    obstacles: [],
+    lastTime: 0
+  };
 
-      const qtext = document.createElement('div');
-      qtext.className = 'qtext';
-      qtext.textContent = item.q;
-      div.appendChild(qtext);
+  // Player
+  const player = {
+    lane: 1,                   // 0..lanes-1; start in lane 1 (second lane)
+    widthRatio: 0.55,
+    height: 38,
+    x: 0,
+    y: 0
+  };
 
-      const optsDiv = document.createElement('div');
-      optsDiv.className = 'options';
-      item.opts.forEach((opt, oi) => {
-        const id = `q${idx}_o${oi}`;
-        const label = document.createElement('label');
-        label.htmlFor = id;
-        label.innerHTML = `<input type="radio" name="q${idx}" id="${id}" value="${oi}"> <span>${String.fromCharCode(65+oi)}. ${opt}</span>`;
-        optsDiv.appendChild(label);
-      });
-      div.appendChild(optsDiv);
-      form.appendChild(div);
+  // Helpers
+  function toPx(n){ return n; }
+
+  function initLayout() {
+    const cssW = canvas.getBoundingClientRect().width;
+    laneWidth = cssW / lanes;
+    player.x = player.lane * laneWidth + laneWidth/2 - (laneWidth*player.widthRatio)/2;
+    player.y = canvas.getBoundingClientRect().height - player.height - 28;
+  }
+
+  initLayout();
+
+  // spawn obstacle
+  function spawnObstacle() {
+    const lane = Math.floor(Math.random()*lanes);
+    const width = laneWidth * (0.5 + Math.random()*0.35);
+    const height = 28 + Math.random()*28;
+    const x = lane * laneWidth + laneWidth/2 - width/2;
+    const y = -height - (Math.random()*80);
+    const type = Math.random() < 0.12 ? 'truck' : 'car';
+    world.obstacles.push({lane, x, y, width, height, type, marked:false});
+  }
+
+  // draw road & lanes
+  function drawRoad() {
+    const w = canvas.getBoundingClientRect().width;
+    const h = canvas.getBoundingClientRect().height;
+    // road background
+    ctx.fillStyle = '#23272b';
+    ctx.fillRect(0, 0, w, h);
+    // lane separators (dashed)
+    ctx.strokeStyle = '#3b3f44';
+    ctx.lineWidth = 2;
+    for(let i=1;i<lanes;i++){
+      const x = i*laneWidth;
+      // dashed middle
+      ctx.setLineDash([14,12]);
+      ctx.beginPath();
+      ctx.moveTo(x, 8);
+      ctx.lineTo(x, h-8);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    // road side stripes
+    ctx.fillStyle = '#1b1f23';
+    ctx.fillRect(0,0, w*0.02, h);
+    ctx.fillRect(w - w*0.02,0, w*0.02, h);
+  }
+
+  // draw player (bike simple)
+  function drawPlayer() {
+    const w = laneWidth * player.widthRatio;
+    const h = player.height;
+    const px = player.lane * laneWidth + laneWidth/2 - w/2;
+    player.x = px;
+    // bike body
+    ctx.fillStyle = '#ffcc00';
+    roundRect(ctx, px, player.y, w, h, 8, true, false);
+    // wheels
+    ctx.fillStyle = '#111';
+    const wheelR = 6;
+    ctx.beginPath(); ctx.arc(px+12, player.y + h, wheelR, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(px + w-12, player.y + h, wheelR, 0, Math.PI*2); ctx.fill();
+  }
+
+  // draw obstacles
+  function drawObstacles() {
+    world.obstacles.forEach(o => {
+      if(o.type === 'truck') ctx.fillStyle = '#cc3333';
+      else ctx.fillStyle = '#3498db';
+      roundRect(ctx, o.x, o.y, o.width, o.height, 6, true, false);
+      // small window
+      ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      ctx.fillRect(o.x + 8, o.y + 6, Math.max(12, o.width - 16), 8);
     });
+  }
 
-    const submitBtn = document.getElementById('submitBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const resultArea = document.getElementById('resultArea');
+  // rounded rect helper
+  function roundRect(ctx, x, y, w, h, r, fill, stroke){
+    if (typeof stroke === 'undefined') stroke = true;
+    if (typeof r === 'undefined') r = 5;
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.arcTo(x+w, y, x+w, y+h, r);
+    ctx.arcTo(x+w, y+h, x, y+h, r);
+    ctx.arcTo(x, y+h, x, y, r);
+    ctx.arcTo(x, y, x+w, y, r);
+    ctx.closePath();
+    if(fill){ ctx.fill(); }
+    if(stroke){ ctx.stroke(); }
+  }
 
-    function grade(auto=false) {
-      let correct = 0;
-      questions.forEach((item, idx) => {
-        const qdiv = document.getElementById('q' + (idx+1));
-        qdiv.querySelectorAll('label').forEach(l => l.classList.remove('correct','wrong'));
-        const sel = form.querySelector(`input[name="q${idx}"]:checked`);
-        const selVal = sel ? Number(sel.value) : null;
-        if (selVal === item.a) {
-          correct++;
-          const label = qdiv.querySelector(`#q${idx}_o${selVal}`).closest('label');
-          label.classList.add('correct');
-        } else {
-          if (selVal !== null) {
-            const sLabel = qdiv.querySelector(`#q${idx}_o${selVal}`).closest('label');
-            sLabel.classList.add('wrong');
-          }
-          const cLabel = qdiv.querySelector(`#q${idx}_o${item.a}`).closest('label');
-          cLabel.classList.add('correct');
-        }
-      });
-
-      resultArea.textContent = `তোমার স্কোর: ${correct} / ${questions.length}`;
-      if (auto) resultArea.textContent += " (টাইম শেষ হয়ে স্বয়ংক্রিয় সাবমিট)";
-      Array.from(form.querySelectorAll('input')).forEach(i => i.disabled = true);
-      submitBtn.disabled = true;
+  // update world
+  function update(dt) {
+    if(!world.running || world.paused) return;
+    world.tick++;
+    // move obstacles
+    const speed = world.speed;
+    world.obstacles.forEach(o => { o.y += speed * (dt/16); });
+    // remove passed obstacles (and increase score)
+    for(let i = world.obstacles.length-1; i>=0; i--){
+      const o = world.obstacles[i];
+      if(o.y > canvas.getBoundingClientRect().height + 60) {
+        world.obstacles.splice(i,1);
+        world.score += 5; // reward for passing obstacle
+        updateUI();
+      }
     }
 
-    submitBtn.addEventListener('click', () => grade(false));
-    resetBtn.addEventListener('click', () => {
-      form.reset();
-      resultArea.textContent = '';
-      Array.from(form.querySelectorAll('label')).forEach(l => l.classList.remove('correct','wrong'));
-      Array.from(form.querySelectorAll('input')).forEach(i => i.disabled = false);
-      submitBtn.disabled = false;
-      clearInterval(timerInterval);
-      startTimer(30*60);
-    });
-
-    const timerEl = document.getElementById('timer');
-    let timerInterval;
-    function startTimer(seconds) {
-      let remaining = seconds;
-      function update() {
-        const m = Math.floor(remaining/60).toString().padStart(2,'0');
-        const s = (remaining%60).toString().padStart(2,'0');
-        timerEl.textContent = `${m}:${s}`;
-        if (remaining <= 0) {
-          clearInterval(timerInterval);
-          grade(true);
-        }
-        remaining--;
-      }
-      update();
-      timerInterval = setInterval(update, 1000);
+    // spawn logic
+    world.spawnTimer++;
+    if(world.spawnTimer >= Math.max(16, world.spawnInterval - Math.floor(world.score/50))) {
+      spawnObstacle();
+      world.spawnTimer = 0;
     }
-    startTimer(30*60);
 
-    window.addEventListener('beforeunload', (e) => {
-      if (!submitBtn.disabled) {
-        e.preventDefault();
-        e.returnValue = '';
+    // continuous score (distance)
+    if(world.tick % 6 === 0){
+      world.score += 1;
+      updateUI();
+    }
+
+    // increase speed per score thresholds
+    const newSpeed = 4 + Math.floor(world.score / 60);
+    if(newSpeed !== world.speed){
+      world.speed = newSpeed;
+      updateUI();
+    }
+
+    // collision check
+    for(const o of world.obstacles) {
+      if(collide(o, player)){
+        endGame();
+        break;
       }
-    });
+    }
+  }
+
+  // collision detection (AABB simplified)
+  function collide(obj, player) {
+    const px = player.x;
+    const py = player.y;
+    const pw = laneWidth * player.widthRatio;
+    const ph = player.height;
+    const ox = obj.x;
+    const oy = obj.y;
+    const ow = obj.width;
+    const oh = obj.height;
+    return !(px + pw < ox + 6 || px > ox + ow - 6 || py + ph < oy + 6 || py > oy + oh - 6);
+  }
+
+  // draw loop
+  function draw() {
+    // clear
+    const w = canvas.getBoundingClientRect().width;
+    const h = canvas.getBoundingClientRect().height;
+    ctx.clearRect(0,0,w,h);
+
+    drawRoad();
+    drawObstacles();
+    drawPlayer();
+
+    if(!world.running){
+      // overlay start hint
+      ctx.fillStyle = 'rgba(0,0,0,0.45)';
+      ctx.fillRect(0,0,w,h);
+      ctx.fillStyle = '#fff';
+      ctx.font = '18px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Press Start to play', w/2, h/2 - 8);
+      ctx.font = '13px Inter, sans-serif';
+      ctx.fillText('Use Left / Right arrows or tap sides (mobile) to change lanes', w/2, h/2 + 14);
+    }
+  }
+
+  // main loop (rAF)
+  function loop(time) {
+    if(!world.lastTime) world.lastTime = time;
+    const dt = Math.min(40, time - world.lastTime);
+    world.lastTime = time;
+    if(world.running && !world.paused){
+      update(dt);
+    }
+    draw();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  // UI updates
+  const scoreEl = document.getElementById('score');
+  const speedEl = document.getElementById('speed');
+  function updateUI(){
+    scoreEl.textContent = 'Score: ' + world.score;
+    speedEl.textContent = 'Speed: ' + world.speed;
+  }
+
+  // controls
+  document.getElementById('startBtn').addEventListener('click', () => {
+    if(!world.running){
+      startGame();
+      document.getElementById('startBtn').textContent = 'Restart';
+    } else {
+      resetGame();
+      startGame();
+    }
+  });
+  document.getElementById('pauseBtn').addEventListener('click', (e) => {
+    world.paused = !world.paused;
+    e.target.textContent = world.paused ? 'Resume' : 'Pause';
+  });
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    resetGame();
+  });
+
+  function startGame(){
+    world.running = true;
+    world.paused = false;
+    world.lastTime = 0;
+    world.tick = 0;
+    world.obstacles = [];
+    world.spawnTimer = 0;
+    // keep current lane
+    initLayout();
+  }
+
+  function resetGame(){
+    world.running = false;
+    world.paused = false;
+    world.score = 0;
+    world.speed = 4;
+    world.obstacles = [];
+    player.lane = 1;
+    updateUI();
+    document.getElementById('startBtn').textContent = 'Start';
+    document.getElementById('pauseBtn').textContent = 'Pause';
+  }
+
+  function endGame(){
+    world.running = false;
+    // show crash effect
+    flashGame();
+    // mark final UI
+    updateUI();
+    // simple overlay message
+    setTimeout(()=> {
+      alert('Game Over! তোমার স্কোর: ' + world.score);
+    }, 60);
+  }
+
+  function flashGame(){
+    const w = canvas.getBoundingClientRect().width;
+    const h = canvas.getBoundingClientRect().height;
+    ctx.save();
+    ctx.fillStyle = 'rgba(255,0,0,0.12)';
+    ctx.fillRect(0,0,w,h);
+    ctx.restore();
+  }
+
+  // input handlers
+  window.addEventListener('keydown', (e) => {
+    if(!world.running) return;
+    if(e.key === 'ArrowLeft') changeLane(-1);
+    if(e.key === 'ArrowRight') changeLane(1);
+  });
+
+  // touch controls: tap left/right half to change lane
+  canvas.addEventListener('touchstart', (e) => {
+    if(!world.running) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    if(x < rect.width / 2) changeLane(-1);
+    else changeLane(1);
+  });
+
+  // click halves for desktop
+  canvas.addEventListener('click', (e) => {
+    if(!world.running) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    if(x < rect.width / 2) changeLane(-1);
+    else changeLane(1);
+  });
+
+  function changeLane(dir){
+    const newLane = Math.max(0, Math.min(lanes-1, player.lane + dir));
+    if(newLane !== player.lane){
+      player.lane = newLane;
+    }
+  }
+
+  // initialize UI values
+  updateUI();
+  // set initial layout on load
+  window.addEventListener('load', () => {
+    initLayout();
+    // draw once
+    draw();
+  });
+
   </script>
 </body>
 </html>
+```
