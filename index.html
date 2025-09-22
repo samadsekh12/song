@@ -1,80 +1,205 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Simple Video Player</title>
+  <meta charset="utf-8" />
+  <title>WBSSC Group C/D Math MCQ (30) — Test</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-    video {
-      max-width: 100%;
-      border: 2px solid #444;
-      border-radius: 8px;
-      background: #000;
-    }
-    button {
-      margin-top: 12px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background: #28a745;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #218838;
-    }
+    body { font-family: "Noto Sans Bengali", Roboto, Arial, sans-serif; line-height:1.5; padding:20px; background:#f7f7f8; color:#111; }
+    h1 { margin:0 0 8px; font-size:20px; }
+    p.lead { margin:0 0 18px; color:#444; }
+    .timer { font-weight:700; font-size:18px; color:#0b5; float:right; }
+    .container { max-width:900px; margin:0 auto; background:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.06); }
+    .question { margin:14px 0; padding:10px; border-radius:6px; background:#fbfcff; border:1px solid #eef; }
+    .qtext { font-weight:600; margin-bottom:8px; }
+    .options label { display:block; margin:6px 0; padding:8px; border-radius:6px; border:1px solid transparent; cursor:pointer; }
+    input[type="radio"] { margin-right:8px; }
+    .controls { margin:18px 0 8px; display:flex; gap:12px; align-items:center; }
+    button { padding:10px 14px; border-radius:6px; border:0; background:#0b79d0; color:#fff; cursor:pointer; }
+    button:disabled { opacity:0.6; cursor:not-allowed; }
+    .result { margin-top:12px; font-weight:700; }
+    .correct { background: #e6f9ea; border-color:#7be08f; }
+    .wrong { background: #fff0f0; border-color:#ff9b9b; opacity:0.95; }
+    .answerLabel { display:block; margin-top:6px; font-size:13px; color:#333; }
+    .note { margin-top:10px; color:#666; font-size:13px; }
+    .legend { display:flex; gap:12px; margin-top:10px; align-items:center; }
+    .legend span { padding:6px 10px; border-radius:6px; font-size:13px; color:#fff; }
+    .lg-c { background:#2ecc71 } .lg-w { background:#e74c3c }
   </style>
 </head>
 <body>
+  <div class="container">
+    <div style="display:flex;align-items:flex-start;gap:12px;">
+      <div style="flex:1">
+        <h1>WBSSC Group C/D গণিত MCQ — ৩০টি</h1>
+        <p class="lead">সময়: <strong>৩০ মিনিট</strong>. নিচের সব প্রশ্নে উত্তর দিন এবং Submit চাপুন। ঠিক উত্তর গুলো সবুজে, ভুলগুলো লাল হবে এবং স্কোর দেখানো হবে।</p>
+      </div>
+      <div class="timer" id="timer">30:00</div>
+    </div>
 
-  <h1>My Video Player</h1>
+    <form id="quizForm">
+      <!-- Questions inserted by script -->
+    </form>
 
-  <!-- HTML5 video element -->
-  <video id="myVideo" width="640" height="360" controls>
-    <source src="Video/মানুষ চিনতে শিখুন.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-  
-   <video id="myVideo" width="640" height="360" controls>
-    <source src="Video/মানুষ চিনতে শিখুন.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-  <video id="myVideo" width="640" height="360" controls>
-    <source src="https://rr4---sn-qxaelnez.googlevideo.com/videoplayback?expire=1756972113&ei=8e-4aOrAKpicp-oPx5CmmQs&ip=41.239.68.181&id=o-AI-rRhqjV35vlgl4ossqMlts5EZYqXrFVpGS11_u3PSt&itag=18&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&bui=AY1jyLN2BfNAIOKHdgCIxXOTgxtyeqd2UkflGwiSrDDtSm1vnpBj2jYd6GbbuWun2izxzLQjkQbtGoBZ&vprv=1&svpuc=1&mime=video%2Fmp4&ns=fR32mHELDTbjEsx4huilZjoQ&rqh=1&gir=yes&clen=452125299&ratebypass=yes&dur=8325.770&lmt=1756267890421773&lmw=1&fexp=24350590,24350737,24350827,24351316,24351318,24351528,24351692,24352157,24352220,24352559,24352568,24352573,24352574,24352580,24352582,24352697,24352699,24352882,24352884,24352961,24352989,24352991,24353151,24353168,24353170,51514993,51557447,51565115,51565682,51580970&c=TVHTML5&sefc=1&txp=4538534&n=PUfQqIrVGONcnQ&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cbui%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cratebypass%2Cdur%2Clmt&sig=AJfQdSswRgIhAJMRvGuVE_F3qCmPGchBPCaO-6OMK3wQgFEySNAy9WogAiEAyPrubN-pfeoLC1Gl1S6SMYUSxyyi7zY1-nVlBS-yWDc%3D&title=Karthikeya%202%20(4K)%20Full%20Movie%20in%20Hindi%20Dubbed%20%7C%20SOUTH%20BLOCKBUSTER%20MOVIE%20%7C%20Nikhil%20Siddartha%20%26%20Anupama&rm=sn-uxaxjvhxbt2u-j5plk7l,sn-hgnld7s&rrc=79,104&req_id=283ea3c6e53ea3ee&cmsv=e&rms=rdu,au&redirect_counter=2&cms_redirect=yes&ipbypass=yes&met=1756952368,&mh=rW&mip=2409:40e0:24:861b:8126:da1c:b5a7:3445&mm=29&mn=sn-qxaelnez&ms=rdu&mt=1756952032&mv=m&mvi=4&pl=36&lsparams=ipbypass,met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=APaTxxMwRQIhAINKpZbsEdAAIXFmgvsKKoVCoMnjghVWQ0SqeNSJNngZAiBABHjD48NL3gPxw_XGYRZ7IEDQlMrpgMVa_HIyDpF_mA%3D%3D" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-  <video id="myVideo" width="640" height="360" controls>
-    <source src="https://rr5---sn-npoldne7.googlevideo.com/videoplayback?expire=1756974310&ei=hvi4aIb7D5zh1d8P1KDloA0&ip=103.62.155.186&id=o-AMd-niMxgxuv83Vy5D5axVh31uYNzS5IH4X3cPcjwe2b&itag=18&source=youtube&requiressl=yes&xpc=EgVo2aDSNQ%3D%3D&bui=AY1jyLPBI4-qIc7aVkwu8STKCplXKD2lFMwiJut9z7tpCr8WQYnU6VbYAG6Fwri4LoThAPUcChZyJ4DE&vprv=1&svpuc=1&mime=video%2Fmp4&ns=PBbVB6tOAi87ZaeZ7J2rLPoQ&rqh=1&gir=yes&clen=27211401&ratebypass=yes&dur=1243.939&lmt=1749519236404472&lmw=1&fexp=24350590,24350737,24350827,24351316,24351318,24351528,24352220,24352539,24352559,24352568,24352574,24352580,24352582,24352697,24352699,24352882,24352884,24352960,24352985,24352987,24353151,24353159,24353168,24353170,51557447,51565115,51565681,51580970&c=TVHTML5&sefc=1&txp=5538534&n=Pl67VpbSwm6UYg&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cxpc%2Cbui%2Cvprv%2Csvpuc%2Cmime%2Cns%2Crqh%2Cgir%2Cclen%2Cratebypass%2Cdur%2Clmt&sig=AJfQdSswRQIgLMLJnRxBHVni6j8IZZGCt2CWLbFnYK4CCsS5OYguEYACIQCIXIVWMCiO9ETEdNlA_sQ4fbsVk0CP9mNkQ4Ydoy5A4A%3D%3D&title=Hindi%20song%20for%20Jubin%20nautial%20%E2%9D%A4%EF%B8%8F%E2%9D%A4%EF%B8%8F%E2%9D%A4%EF%B8%8F%E2%9D%A4%EF%B8%8F&rm=sn-25g5n5u2i-jbtl7l&rrc=79,80&req_id=b73901dae2b7a3ee&cmsv=e&redirect_counter=2&cm2rm=sn-hoal7s&cms_redirect=yes&met=1756952743,&mh=g3&mip=2409:40e0:24:861b:8126:da1c:b5a7:3445&mm=34&mn=sn-npoldne7&ms=ltu&mt=1756952480&mv=m&mvi=5&pl=36&rms=ltu,au&lsparams=met,mh,mip,mm,mn,ms,mv,mvi,pl,rms&lsig=APaTxxMwRAIgcqNKo1HmYf8QPfgpEa37_WxNTMg-VPvLglw_Mxdw3a8CIGdeIcX8G-l891qEvLbJK8ab6rL4vhV2KMp0VDJOnT-2" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+    <div class="controls">
+      <button id="submitBtn" type="button">Submit</button>
+      <button id="resetBtn" type="button">Reset</button>
+      <div style="margin-left:auto" class="legend">
+        <span class="lg-c">ঠিক</span>
+        <span class="lg-w">ভুল</span>
+      </div>
+    </div>
 
-  <!-- Custom play button -->
-  <button id="playBtn">Play Video</button>
+    <div class="result" id="resultArea" aria-live="polite"></div>
+    <p class="note">প্রথমে নিজে চেষ্টার পর Submit চাপো। টাইম শেষ হলে স্বয়ংক্রিয় Submit হবে।</p>
+  </div>
 
   <script>
-    const video = document.getElementById('myVideo');
-    const playBtn = document.getElementById('playBtn');
+    // Questions + options + correct answers (keys match earlier answer key)
+    const questions = [
+      { q: "1. 25% of 240 কত?", opts: ["40","50","60","45"], a: 2 }, // C
+      { q: "2. 7 + 13 × 2 = ?", opts: ["40","33","27","20"], a: 1 }, // B (order: A0 B1 C2 D3)
+      { q: "3. 3/4 + 1/8 = ?", opts: ["7/8","1","5/8","11/8"], a: 0 },
+      { q: "4. 15 এবং 20 এর HCF =", opts: ["1","3","5","15"], a: 2 },
+      { q: "5. 9 × 9 = ?", opts: ["72","81","91","69"], a: 1 },
+      { q: "6. ব্যাসার্ধ 7 সেমি হলে ব্যাস কত?", opts: ["7 সেমি","14 সেমি","21 সেমি","28 সেমি"], a: 1 },
+      { q: "7. 120 ÷ 5 = ?", opts: ["24","20","18","25"], a: 0 },
+      { q: "8. 2^3 = ?", opts: ["6","8","9","12"], a: 1 },
+      { q: "9. একটি সপ্তাহে কত দিন আছে?", opts: ["5","6","7","8"], a: 2 },
+      { q: "10. 100 এর 10% কত?", opts: ["1","5","10","20"], a: 2 },
 
-    playBtn.addEventListener('click', () => {
-      if (video.paused) {
-        video.play();
-        playBtn.textContent = 'Pause Video';
-      } else {
-        video.pause();
-        playBtn.textContent = 'Play Video';
+      { q: "11. 45% of 200 = ?", opts: ["80","90","85","95"], a: 1 },
+      { q: "12. একটি সংখ্যার 3/5 = 54 হলে সংখ্যা কত?", opts: ["60","70","90","120"], a: 2 },
+      { q: "13. 5x − 7 = 18 হলে x = ?", opts: ["5","6","7","4"], a: 0 },
+      { q: "14. ত্রিভুজের ক্ষেত্রফল 30, ভিত্তি 10 হলে উচ্চতা কত?", opts: ["6 সেমি","3 সেমি","5 সেমি","4 সেমি"], a: 0 },
+      { q: "15. 0.75 কে ভগ্নাংশে প্রকাশ করলে?", opts: ["3/4","7/10","75/100","1/4"], a: 0 },
+      { q: "16. 8 ও 12 এর LCM কত?", opts: ["12","24","48","20"], a: 1 },
+      { q: "17. 20% discount এ নতুন দাম 400 হলে মূল দাম কত ছিল?", opts: ["480","500","520","450"], a: 1 },
+      { q: "18. 3 লিটার ও 5 লিটার মিলে মোট?", opts: ["8 লিটার","15 লিটার","2 লিটার","10 লিটার"], a: 0 },
+      { q: "19. 36 = 6 × ?", opts: ["5","6","7","4"], a: 1 },
+      { q: "20. 14 এবং 21 এর গড় কত?", opts: ["16","17.5","17","15"], a: 1 },
+
+      { q: "21. যদি x + 2y = 14 এবং x − y = 2, তবে x = ?", opts: ["6","4","8","10"], a: 2 },
+      { q: "22. গাড়ি 60 km/h গতি করে 3.5 ঘন্টা চললে কত কিমি?", opts: ["210 km","180 km","200 km","220 km"], a: 0 },
+      { q: "23. 5 এর log10 প্রায় কত?", opts: ["0.3010","0.6990","0.4771","1.0000"], a: 2 },
+      { q: "24. বৃত্তের ব্যাসার্ধ 14 সেমি হলে ক্ষেত্রফল (π = 22/7) = ?", opts: ["616 π সেমি^2","616 সেমি^2","(compute) 616?","616 × (22/7) সেমি^2"], a: 1 },
+      { q: "25. 3x^2 = 48 হলে ধনাত্মক x =", opts: ["4","sqrt(16) = 4","sqrt(48/3)=4","সব একই"], a: 3 },
+      { q: "26. 0.2 + 0.03 = ?", opts: ["0.23","0.203","0.5","0.023"], a: 0 },
+      { q: "27. একটি সংখ্যার 20% = 30; সংখ্যা কত?", opts: ["150","60","300","120"], a: 0 },
+      { q: "28. 7 : 49 :: 9 : ?", opts: ["81","72","63","90"], a: 0 },
+      { q: "29. 360° কে 9 ভাগ করলে এক ভাগ ?", opts: ["30°","40°","20°","45°"], a: 0 },
+      { q: "30. 1200 টাকার পণ্য 25% লাভে বিক্রি করলে বিক্রয় মূল্য কত হবে?", opts: ["1500","1400","1600","1250"], a: 0 }
+    ];
+
+    // Render questions
+    const form = document.getElementById('quizForm');
+    questions.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'question';
+      div.id = 'q' + (idx+1);
+
+      const qtext = document.createElement('div');
+      qtext.className = 'qtext';
+      qtext.textContent = item.q;
+      div.appendChild(qtext);
+
+      const optsDiv = document.createElement('div');
+      optsDiv.className = 'options';
+      item.opts.forEach((opt, oi) => {
+        const id = `q${idx}_o${oi}`;
+        const label = document.createElement('label');
+        label.htmlFor = id;
+        label.innerHTML = `<input type="radio" name="q${idx}" id="${id}" value="${oi}"> <span>${String.fromCharCode(65+oi)}. ${opt}</span>`;
+        optsDiv.appendChild(label);
+      });
+      div.appendChild(optsDiv);
+      form.appendChild(div);
+    });
+
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const resultArea = document.getElementById('resultArea');
+
+    function grade(auto=false) {
+      let correct = 0;
+      questions.forEach((item, idx) => {
+        const qdiv = document.getElementById('q' + (idx+1));
+        // clear classes
+        qdiv.classList.remove('correct','wrong');
+        // find selected
+        const sel = form.querySelector(`input[name="q${idx}"]:checked`);
+        const selVal = sel ? Number(sel.value) : null;
+        if (selVal === item.a) {
+          correct++;
+          // mark correct option green
+          const label = qdiv.querySelector(`#q${idx}_o${selVal}`).closest('label');
+          label.classList.add('correct');
+        } else {
+          // mark selected wrong (if any)
+          if (selVal !== null) {
+            const sLabel = qdiv.querySelector(`#q${idx}_o${selVal}`).closest('label');
+            sLabel.classList.add('wrong');
+          }
+          // highlight correct option
+          const cLabel = qdiv.querySelector(`#q${idx}_o${item.a}`).closest('label');
+          cLabel.classList.add('correct');
+        }
+      });
+
+      resultArea.textContent = `তোমার স্কোর: ${correct} / ${questions.length}`;
+      if (auto) resultArea.textContent += " (টাইম শেষ হয়ে স্বয়ংক্রিয় সাবমিট)";
+      // scroll to result
+      resultArea.scrollIntoView({behavior:'smooth', block:'center'});
+      // disable further changes
+      Array.from(form.querySelectorAll('input')).forEach(i => i.disabled = true);
+      submitBtn.disabled = true;
+    }
+
+    submitBtn.addEventListener('click', () => grade(false));
+    resetBtn.addEventListener('click', () => {
+      // reset form and UI
+      form.reset();
+      resultArea.textContent = '';
+      Array.from(form.querySelectorAll('label')).forEach(l => {
+        l.classList.remove('correct','wrong');
+      });
+      Array.from(form.querySelectorAll('input')).forEach(i => i.disabled = false);
+      submitBtn.disabled = false;
+      // reset timer
+      clearInterval(timerInterval);
+      startTimer(30*60);
+    });
+
+    // Timer
+    const timerEl = document.getElementById('timer');
+    let timerInterval;
+    function startTimer(seconds) {
+      let remaining = seconds;
+      function update() {
+        const m = Math.floor(remaining/60).toString().padStart(2,'0');
+        const s = (remaining%60).toString().padStart(2,'0');
+        timerEl.textContent = `${m}:${s}`;
+        if (remaining <= 0) {
+          clearInterval(timerInterval);
+          // auto submit
+          grade(true);
+        }
+        remaining--;
+      }
+      update();
+      timerInterval = setInterval(update, 1000);
+    }
+
+    // start 30 minutes
+    startTimer(30*60);
+
+    // prevent accidental unload
+    window.addEventListener('beforeunload', (e) => {
+      if (!submitBtn.disabled) {
+        e.preventDefault();
+        e.returnValue = '';
       }
     });
   </script>
-
 </body>
 </html>
