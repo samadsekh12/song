@@ -2,37 +2,41 @@
 <html lang="bn">
 <head>
   <meta charset="utf-8" />
-  <title>Endless Bike Racer — One Page</title>
+  <title>Endless Bike Racer — Bike Added</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     :root{
-      --bg:#0b1320;
-      --road:#2b2f36;
-      --lane:#3a3f46;
-      --accent:#ffcc00;
-      --white:#f7f7f7;
-      --danger:#ff4d4f;
-      --ui-bg: rgba(0,0,0,0.45);
+      --bg:#041022; --road:#23272b; --lane:#3a3f44; --accent:#ffcc00;
+      --ui-bg:rgba(0,0,0,0.45); --good:#2ecc71; --bad:#e74c3c;
     }
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,#041022 0%, #071428 60%);font-family:Inter, "Noto Sans Bengali", sans-serif;color:var(--white)}
-    .wrap{max-width:980px;margin:18px auto;padding:12px;}
-    header{display:flex;gap:12px;align-items:center;justify-content:space-between}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#041022 0%, #071428 60%);font-family:Inter, "Noto Sans Bengali", sans-serif;color:#fff}
+    .wrap{max-width:980px;margin:14px auto;padding:12px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
     h1{font-size:18px;margin:0}
     .controls{display:flex;gap:8px;align-items:center}
     button{background:var(--accent);border:0;padding:8px 12px;border-radius:8px;color:#111;cursor:pointer;font-weight:700}
-    button.secondary{background:transparent;color:var(--white);border:1px solid rgba(255,255,255,0.08)}
+    button.secondary{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.08)}
     .ui{display:flex;gap:12px;align-items:center}
     .stat{background:var(--ui-bg);padding:8px 12px;border-radius:8px;font-weight:700}
     canvas{display:block;border-radius:12px;margin-top:12px;width:100%;height:520px;background:var(--road);box-shadow:0 10px 30px rgba(0,0,0,0.6)}
-    footer{margin-top:12px;color:rgba(255,255,255,0.6);font-size:13px;text-align:center}
-    /* responsive */
+    footer{text-align:center;margin-top:12px;color:rgba(255,255,255,0.65);font-size:13px}
+    /* bike sprite styling for small UI preview */
+    .bikePreview{width:48px;height:48px;border-radius:8px;background:linear-gradient(90deg,#ffde59,#ffcc00);display:flex;align-items:center;justify-content:center;color:#111;font-weight:900}
     @media (max-width:640px){canvas{height:420px}}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <h1>Endless Bike Racer (4 Lanes) — Score increases speed</h1>
+      <div>
+        <h1>Endless Bike Racer — Full Bike</h1>
+        <div style="display:flex;gap:8px;margin-top:6px;align-items:center">
+          <div class="bikePreview">B</div>
+          <div style="font-size:13px;color:#ddd">4 Lanes · Score ↑ → Speed ↑ · Tap / Arrows</div>
+        </div>
+      </div>
+
       <div class="controls">
         <div class="ui">
           <div class="stat" id="score">Score: 0</div>
@@ -45,364 +49,325 @@
     </header>
 
     <canvas id="game"></canvas>
-
-    <footer>Use Left / Right arrows to change lanes. Mobile: tap left/right half of canvas.</footer>
+    <footer>Left / Right arrows or tap left/right half to change lanes. Avoid obstacles and other bikes.</footer>
   </div>
 
   <script>
-  /* -----------------------------
-     Endless 4-lane bike racing game
-     Single-file HTML/CSS/JS
-     Basic mechanics:
-       - 4 lanes horizontally
-       - player occupies one lane (bike)
-       - obstacles spawn ahead and move down (toward player)
-       - score increments over time; every threshold increases speed
-       - endless until collision
-     Controls:
-       - Left/Right arrows (desktop)
-       - Tap left/right half (mobile)
-     ----------------------------- */
+  /* -------------------------------------------
+     Endless Bike Racer (updated) — adds moving "bike" sprite,
+     opponent bikes, simple tilt animation, engine sound placeholders (no audio),
+     collision handling and increasing speed with score.
+     Single-file: HTML + CSS + JS
+     ------------------------------------------- */
 
   const canvas = document.getElementById('game');
-  const ctx = canvas.getContext('2d', { alpha: false });
+  const ctx = canvas.getContext('2d');
 
-  // sizing
-  function resize() {
+  // Responsive sizing
+  function setCanvasSize(){
     const rect = canvas.getBoundingClientRect();
-    canvas.width = Math.min(980, Math.max(360, rect.width)) * devicePixelRatio;
-    canvas.height = (rect.height || (520)) * devicePixelRatio;
-    ctx.scale(devicePixelRatio, devicePixelRatio);
+    const cssW = Math.min(980, Math.max(360, canvas.parentElement.clientWidth));
+    canvas.style.width = cssW + 'px';
+    canvas.style.height = '520px';
+    const ratio = window.devicePixelRatio || 1;
+    canvas.width = cssW * ratio;
+    canvas.height = 520 * ratio;
+    ctx.setTransform(ratio,0,0,ratio,0,0);
   }
-  // set CSS height so boundingRect exists
-  canvas.style.height = '520px';
-  resize();
-  window.addEventListener('resize', () => { resize(); });
+  setCanvasSize();
+  window.addEventListener('resize', setCanvasSize);
 
-  // Game variables
-  const lanes = 4;
-  let laneWidth;
-  let world = {
-    running: false,
-    paused: false,
-    score: 0,
-    speed: 4,        // base speed (pixels per tick)
-    spawnTimer: 0,
-    spawnInterval: 90, // frames
-    tick: 0,
-    obstacles: [],
-    lastTime: 0
+  // Game config
+  const LANES = 4;
+  let laneW;
+  const world = {
+    running:false, paused:false, score:0, speed:4,
+    obstacles:[], opponents:[], tick:0, spawnTimer:0, spawnInterval:90, lastTime:0
   };
 
-  // Player
   const player = {
-    lane: 1,                   // 0..lanes-1; start in lane 1 (second lane)
-    widthRatio: 0.55,
-    height: 38,
-    x: 0,
-    y: 0
+    lane:1, widthRatio:0.55, height:44, yOffset:20,
+    bobOffset:0, bobDir:1
   };
 
-  // Helpers
-  function toPx(n){ return n; }
+  function layout(){
+    laneW = canvas.getBoundingClientRect().width / LANES;
+    player.x = player.lane * laneW + laneW/2 - (laneW * player.widthRatio)/2;
+    player.y = canvas.getBoundingClientRect().height - player.height - player.yOffset;
+  }
+  layout();
 
-  function initLayout() {
-    const cssW = canvas.getBoundingClientRect().width;
-    laneWidth = cssW / lanes;
-    player.x = player.lane * laneWidth + laneWidth/2 - (laneWidth*player.widthRatio)/2;
-    player.y = canvas.getBoundingClientRect().height - player.height - 28;
+  // utilities
+  function roundRect(c,x,y,w,h,r,fill){
+    c.beginPath();
+    c.moveTo(x+r,y);
+    c.arcTo(x+w,y,x+w,y+h,r);
+    c.arcTo(x+w,y+h,x,y+h,r);
+    c.arcTo(x,y+h,x,y,r);
+    c.arcTo(x,y,x+w,y,r);
+    c.closePath();
+    if(fill) c.fill(); else c.stroke();
   }
 
-  initLayout();
-
-  // spawn obstacle
-  function spawnObstacle() {
-    const lane = Math.floor(Math.random()*lanes);
-    const width = laneWidth * (0.5 + Math.random()*0.35);
-    const height = 28 + Math.random()*28;
-    const x = lane * laneWidth + laneWidth/2 - width/2;
-    const y = -height - (Math.random()*80);
-    const type = Math.random() < 0.12 ? 'truck' : 'car';
-    world.obstacles.push({lane, x, y, width, height, type, marked:false});
+  // spawn obstacle/opponent
+  function spawnThing(){
+    const lane = Math.floor(Math.random()*LANES);
+    const isOpponent = Math.random() < 0.4; // 40% chance opponent bike
+    const width = laneW * (isOpponent ? 0.5 : (0.45 + Math.random()*0.3));
+    const height = isOpponent ? 44 : (24 + Math.random()*28);
+    const x = lane * laneW + laneW/2 - width/2;
+    const y = -height - Math.random()*120;
+    if(isOpponent){
+      world.opponents.push({lane,x,y,width,height,type:'bike',speed: world.speed * (0.6 + Math.random()*0.8)});
+    } else {
+      world.obstacles.push({lane,x,y,width,height,type:'box'});
+    }
   }
 
   // draw road & lanes
-  function drawRoad() {
+  function drawRoad(){
     const w = canvas.getBoundingClientRect().width;
     const h = canvas.getBoundingClientRect().height;
-    // road background
+    // background
     ctx.fillStyle = '#23272b';
-    ctx.fillRect(0, 0, w, h);
-    // lane separators (dashed)
+    ctx.fillRect(0,0,w,h);
+    // side strips
+    ctx.fillStyle = '#1b1f23';
+    ctx.fillRect(0,0,w*0.03,h);
+    ctx.fillRect(w - w*0.03,0,w*0.03,h);
+    // dashed lane separators
     ctx.strokeStyle = '#3b3f44';
     ctx.lineWidth = 2;
-    for(let i=1;i<lanes;i++){
-      const x = i*laneWidth;
-      // dashed middle
+    for(let i=1;i<LANES;i++){
+      const x = i * laneW;
       ctx.setLineDash([14,12]);
       ctx.beginPath();
       ctx.moveTo(x, 8);
-      ctx.lineTo(x, h-8);
+      ctx.lineTo(x, h - 8);
       ctx.stroke();
       ctx.setLineDash([]);
     }
-    // road side stripes
-    ctx.fillStyle = '#1b1f23';
-    ctx.fillRect(0,0, w*0.02, h);
-    ctx.fillRect(w - w*0.02,0, w*0.02, h);
   }
 
-  // draw player (bike simple)
-  function drawPlayer() {
-    const w = laneWidth * player.widthRatio;
+  // draw player bike (simple shape + tilt)
+  function drawPlayer(dt){
+    // bobbing for simple animation
+    player.bobOffset += player.bobDir * 0.08 * (dt/16);
+    if(player.bobOffset > 2) player.bobDir = -1;
+    if(player.bobOffset < -2) player.bobDir = 1;
+
+    const w = laneW * player.widthRatio;
     const h = player.height;
-    const px = player.lane * laneWidth + laneWidth/2 - w/2;
+    const px = player.lane * laneW + laneW/2 - w/2;
     player.x = px;
-    // bike body
+    // shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.beginPath();
+    ctx.ellipse(px + w/2, player.y + h + 6, w*0.45, 6, 0, 0, Math.PI*2);
+    ctx.fill();
+    // bike body (yellow)
     ctx.fillStyle = '#ffcc00';
-    roundRect(ctx, px, player.y, w, h, 8, true, false);
+    roundRect(ctx, px, player.y + player.bobOffset, w, h, 8, true);
+    // small seat/top box
+    ctx.fillStyle = '#c68f00';
+    roundRect(ctx, px + w*0.62, player.y + 6 + player.bobOffset, w*0.28, h*0.45, 4, true);
     // wheels
     ctx.fillStyle = '#111';
-    const wheelR = 6;
-    ctx.beginPath(); ctx.arc(px+12, player.y + h, wheelR, 0, Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(px + w-12, player.y + h, wheelR, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(px+12, player.y+h + player.bobOffset, 7, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(px + w-12, player.y+h + player.bobOffset, 7, 0, Math.PI*2); ctx.fill();
+    // headlight glow
+    ctx.fillStyle = 'rgba(255,240,160,0.08)';
+    ctx.beginPath(); ctx.ellipse(px + w + 12, player.y + h/2 + player.bobOffset, 24, 14, 0, 0, Math.PI*2); ctx.fill();
   }
 
-  // draw obstacles
-  function drawObstacles() {
-    world.obstacles.forEach(o => {
-      if(o.type === 'truck') ctx.fillStyle = '#cc3333';
-      else ctx.fillStyle = '#3498db';
-      roundRect(ctx, o.x, o.y, o.width, o.height, 6, true, false);
-      // small window
+  // draw opponents and obstacles
+  function drawThings(){
+    // obstacles (boxes)
+    for(const o of world.obstacles){
+      ctx.fillStyle = '#8b5e3c';
+      roundRect(ctx, o.x, o.y, o.width, o.height, 6, true);
       ctx.fillStyle = 'rgba(255,255,255,0.12)';
-      ctx.fillRect(o.x + 8, o.y + 6, Math.max(12, o.width - 16), 8);
-    });
+      ctx.fillRect(o.x + 8, o.y + 6, Math.max(8, o.width - 16), 6);
+    }
+    // opponents (bikes)
+    for(const b of world.opponents){
+      ctx.fillStyle = '#d64545';
+      roundRect(ctx, b.x, b.y, b.width, b.height, 6, true);
+      ctx.fillStyle = '#111';
+      ctx.beginPath(); ctx.arc(b.x+12, b.y+b.height+4, 6, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(b.x + b.width-12, b.y+b.height+4, 6, 0, Math.PI*2); ctx.fill();
+      // small visor
+      ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      ctx.fillRect(b.x + 8, b.y + 6, Math.max(12, b.width - 16), 8);
+    }
   }
 
-  // rounded rect helper
-  function roundRect(ctx, x, y, w, h, r, fill, stroke){
-    if (typeof stroke === 'undefined') stroke = true;
-    if (typeof r === 'undefined') r = 5;
-    ctx.beginPath();
-    ctx.moveTo(x+r, y);
-    ctx.arcTo(x+w, y, x+w, y+h, r);
-    ctx.arcTo(x+w, y+h, x, y+h, r);
-    ctx.arcTo(x, y+h, x, y, r);
-    ctx.arcTo(x, y, x+w, y, r);
-    ctx.closePath();
-    if(fill){ ctx.fill(); }
-    if(stroke){ ctx.stroke(); }
+  // collision detection (AABB)
+  function isColliding(a, b){
+    return !(a.x + a.width < b.x + 6 || a.x > b.x + b.width - 6 || a.y + a.height < b.y + 6 || a.y > b.y + b.height - 6);
   }
 
-  // update world
-  function update(dt) {
+  // update world per frame
+  function update(dt){
     if(!world.running || world.paused) return;
     world.tick++;
-    // move obstacles
+    world.spawnTimer++;
+
     const speed = world.speed;
-    world.obstacles.forEach(o => { o.y += speed * (dt/16); });
-    // remove passed obstacles (and increase score)
-    for(let i = world.obstacles.length-1; i>=0; i--){
-      const o = world.obstacles[i];
-      if(o.y > canvas.getBoundingClientRect().height + 60) {
+    // move obstacles/opponents downward
+    for(const o of world.obstacles){ o.y += speed * (dt/16); }
+    for(const b of world.opponents){ b.y += (b.speed || speed) * (dt/16); }
+
+    // remove passed ones, adjust score
+    for(let i = world.obstacles.length-1;i>=0;i--){
+      if(world.obstacles[i].y > canvas.getBoundingClientRect().height + 60){
         world.obstacles.splice(i,1);
-        world.score += 5; // reward for passing obstacle
-        updateUI();
+        world.score += 5;
+      }
+    }
+    for(let i = world.opponents.length-1;i>=0;i--){
+      if(world.opponents[i].y > canvas.getBoundingClientRect().height + 80){
+        world.opponents.splice(i,1);
+        world.score += 8;
       }
     }
 
-    // spawn logic
-    world.spawnTimer++;
-    if(world.spawnTimer >= Math.max(16, world.spawnInterval - Math.floor(world.score/50))) {
-      spawnObstacle();
+    // spawn frequency speeds up with score
+    const spawnThreshold = Math.max(16, world.spawnInterval - Math.floor(world.score / 40));
+    if(world.spawnTimer >= spawnThreshold){
+      // sometimes spawn multiple close ones
+      if(Math.random()<0.15) spawnThing();
+      spawnThing();
       world.spawnTimer = 0;
     }
 
-    // continuous score (distance)
-    if(world.tick % 6 === 0){
-      world.score += 1;
-      updateUI();
-    }
+    // continuous score increment (distance)
+    if(world.tick % 6 === 0) world.score++;
 
-    // increase speed per score thresholds
+    // speed increases with score
     const newSpeed = 4 + Math.floor(world.score / 60);
-    if(newSpeed !== world.speed){
-      world.speed = newSpeed;
-      updateUI();
-    }
+    if(newSpeed !== world.speed) world.speed = newSpeed;
 
-    // collision check
-    for(const o of world.obstacles) {
-      if(collide(o, player)){
-        endGame();
-        break;
+    // collision checks: player vs obstacles/opponents
+    const pRect = { x: player.x, y: player.y, width: laneW * player.widthRatio, height: player.height };
+    for(const o of world.obstacles){
+      const oRect = { x: o.x, y: o.y, width: o.width, height: o.height };
+      if(isColliding(pRect, oRect)) {
+        crash();
+        return;
+      }
+    }
+    for(const b of world.opponents){
+      const bRect = { x: b.x, y: b.y, width: b.width, height: b.height };
+      if(isColliding(pRect, bRect)) {
+        crash();
+        return;
       }
     }
   }
 
-  // collision detection (AABB simplified)
-  function collide(obj, player) {
-    const px = player.x;
-    const py = player.y;
-    const pw = laneWidth * player.widthRatio;
-    const ph = player.height;
-    const ox = obj.x;
-    const oy = obj.y;
-    const ow = obj.width;
-    const oh = obj.height;
-    return !(px + pw < ox + 6 || px > ox + ow - 6 || py + ph < oy + 6 || py > oy + oh - 6);
-  }
-
   // draw loop
-  function draw() {
-    // clear
+  function draw(dt){
     const w = canvas.getBoundingClientRect().width;
     const h = canvas.getBoundingClientRect().height;
     ctx.clearRect(0,0,w,h);
-
     drawRoad();
-    drawObstacles();
-    drawPlayer();
-
+    drawThings();
+    drawPlayer(dt);
+    // HUD overlay when not running
     if(!world.running){
-      // overlay start hint
       ctx.fillStyle = 'rgba(0,0,0,0.45)';
       ctx.fillRect(0,0,w,h);
       ctx.fillStyle = '#fff';
-      ctx.font = '18px Inter, sans-serif';
       ctx.textAlign = 'center';
+      ctx.font = '18px Inter, sans-serif';
       ctx.fillText('Press Start to play', w/2, h/2 - 8);
       ctx.font = '13px Inter, sans-serif';
-      ctx.fillText('Use Left / Right arrows or tap sides (mobile) to change lanes', w/2, h/2 + 14);
+      ctx.fillText('Use Left/Right arrows or tap sides to change lanes', w/2, h/2 + 14);
     }
   }
 
-  // main loop (rAF)
-  function loop(time) {
+  // main RAF loop
+  function loop(time){
     if(!world.lastTime) world.lastTime = time;
     const dt = Math.min(40, time - world.lastTime);
     world.lastTime = time;
-    if(world.running && !world.paused){
-      update(dt);
-    }
-    draw();
+    if(world.running && !world.paused) update(dt);
+    draw(dt);
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
 
-  // UI updates
-  const scoreEl = document.getElementById('score');
-  const speedEl = document.getElementById('speed');
-  function updateUI(){
-    scoreEl.textContent = 'Score: ' + world.score;
-    speedEl.textContent = 'Speed: ' + world.speed;
-  }
+  // UI update
+  const scoreEl = document.getElementById('score'), speedEl = document.getElementById('speed');
+  function updateUI(){ scoreEl.textContent = 'Score: ' + world.score; speedEl.textContent = 'Speed: ' + world.speed; }
+  updateUI();
 
   // controls
-  document.getElementById('startBtn').addEventListener('click', () => {
-    if(!world.running){
-      startGame();
-      document.getElementById('startBtn').textContent = 'Restart';
-    } else {
-      resetGame();
-      startGame();
-    }
+  document.getElementById('startBtn').addEventListener('click', ()=> {
+    if(!world.running) startGame(); else { resetGame(); startGame(); }
   });
-  document.getElementById('pauseBtn').addEventListener('click', (e) => {
+  document.getElementById('pauseBtn').addEventListener('click', (e)=> {
     world.paused = !world.paused;
     e.target.textContent = world.paused ? 'Resume' : 'Pause';
   });
-  document.getElementById('resetBtn').addEventListener('click', () => {
-    resetGame();
-  });
+  document.getElementById('resetBtn').addEventListener('click', resetGame);
 
   function startGame(){
-    world.running = true;
-    world.paused = false;
-    world.lastTime = 0;
-    world.tick = 0;
-    world.obstacles = [];
-    world.spawnTimer = 0;
-    // keep current lane
-    initLayout();
+    world.running = true; world.paused = false; world.score = 0; world.speed = 4;
+    world.obstacles = []; world.opponents = []; world.tick = 0; world.spawnTimer = 0; world.lastTime = 0;
+    player.lane = 1; layout(); updateUI();
   }
-
   function resetGame(){
-    world.running = false;
-    world.paused = false;
-    world.score = 0;
-    world.speed = 4;
-    world.obstacles = [];
-    player.lane = 1;
-    updateUI();
-    document.getElementById('startBtn').textContent = 'Start';
-    document.getElementById('pauseBtn').textContent = 'Pause';
+    world.running = false; world.paused = false; world.score = 0; world.speed = 4;
+    world.obstacles = []; world.opponents = []; player.lane = 1; layout(); updateUI();
+    document.getElementById('startBtn').textContent = 'Start'; document.getElementById('pauseBtn').textContent = 'Pause';
   }
 
-  function endGame(){
+  // crash handling
+  function crash(){
     world.running = false;
-    // show crash effect
-    flashGame();
-    // mark final UI
+    // brief red flash
+    ctx.fillStyle = 'rgba(255,0,0,0.18)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
     updateUI();
-    // simple overlay message
     setTimeout(()=> {
       alert('Game Over! তোমার স্কোর: ' + world.score);
-    }, 60);
+    }, 80);
   }
 
-  function flashGame(){
-    const w = canvas.getBoundingClientRect().width;
-    const h = canvas.getBoundingClientRect().height;
-    ctx.save();
-    ctx.fillStyle = 'rgba(255,0,0,0.12)';
-    ctx.fillRect(0,0,w,h);
-    ctx.restore();
-  }
-
-  // input handlers
-  window.addEventListener('keydown', (e) => {
+  // input handlers: keyboard, click, touch
+  window.addEventListener('keydown', e=>{
     if(!world.running) return;
     if(e.key === 'ArrowLeft') changeLane(-1);
     if(e.key === 'ArrowRight') changeLane(1);
   });
 
-  // touch controls: tap left/right half to change lane
-  canvas.addEventListener('touchstart', (e) => {
-    if(!world.running) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.touches[0].clientX - rect.left;
-    if(x < rect.width / 2) changeLane(-1);
-    else changeLane(1);
-  });
-
-  // click halves for desktop
-  canvas.addEventListener('click', (e) => {
+  canvas.addEventListener('click', e=>{
     if(!world.running) return;
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
-    if(x < rect.width / 2) changeLane(-1);
-    else changeLane(1);
+    if(x < rect.width/2) changeLane(-1); else changeLane(1);
+  });
+  canvas.addEventListener('touchstart', e=>{
+    if(!world.running) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    if(x < rect.width/2) changeLane(-1); else changeLane(1);
   });
 
   function changeLane(dir){
-    const newLane = Math.max(0, Math.min(lanes-1, player.lane + dir));
-    if(newLane !== player.lane){
-      player.lane = newLane;
-    }
+    const nl = Math.max(0, Math.min(LANES-1, player.lane + dir));
+    if(nl !== player.lane) { player.lane = nl; layout(); }
   }
 
-  // initialize UI values
-  updateUI();
-  // set initial layout on load
-  window.addEventListener('load', () => {
-    initLayout();
-    // draw once
-    draw();
-  });
+  // update UI regularly
+  setInterval(updateUI, 200);
+
+  // ensure layout updates on resize and load
+  window.addEventListener('resize', ()=>{ setCanvasSize(); layout(); });
+  window.addEventListener('load', ()=>{ setCanvasSize(); layout(); draw(0); });
 
   </script>
 </body>
 </html>
-```
