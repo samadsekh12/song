@@ -1,0 +1,156 @@
+/* ===================================================================
+   Card Game Layout & Theming
+   =================================================================== */
+
+/* root custom properties for sizing, spacing, colors */
+:root {
+  --card-width: 60px;
+  --card-height: 90px;
+  --card-spacing: 8px;
+  --table-bg: #2a8fbd;
+  --hand-bg: #145374;
+  --card-border: 1px solid #000;
+  --highlight: #ffd54f;
+  --font-family: sans-serif;
+  --transition: 0.3s ease;
+}
+
+/* reset & base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: var(--table-bg);
+  color: #fff;
+  font-family: var(--font-family);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* header and controls */
+header {
+  background: var(--hand-bg);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#controls input,
+#controls button {
+  margin-left: 6px;
+  padding: 4px 8px;
+}
+
+/* main table layout */
+#table {
+  flex: 1;
+  display: grid;
+  grid-template-areas:
+    "ai1 center ai2"
+    "ai3 center player";
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--card-spacing);
+  padding: var(--card-spacing);
+}
+
+.player-area {
+  background: var(--hand-bg);
+  padding: var(--card-spacing);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#ai1 { grid-area: ai1; }
+#ai2 { grid-area: ai2; }
+#ai3 { grid-area: ai3; }
+#center { grid-area: center; position: relative; }
+
+/* hands */
+.hand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--card-spacing);
+  justify-content: center;
+  background: var(--hand-bg);
+  padding: var(--card-spacing);
+  border-radius: 4px;
+  min-height: var(--card-height);
+}
+
+/* card styling */
+.card {
+  width: var(--card-width);
+  height: var(--card-height);
+  border: var(--card-border);
+  border-radius: 4px;
+  background: #fff;
+  color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  cursor: pointer;
+  transition: transform var(--transition),
+              box-shadow var(--transition);
+}
+.card.draggable {
+  cursor: grab;
+}
+.card:focus {
+  outline: 2px solid var(--highlight);
+}
+.card.highlight {
+  box-shadow: 0 0 6px var(--highlight);
+}
+
+/* info areas */
+.info {
+  margin-top: 6px;
+  display: flex;
+  gap: 8px;
+  font-size: 0.9em;
+}
+
+/* center play area animations */
+#center .card {
+  position: absolute;
+  transition: transform var(--transition), opacity var(--transition);
+}
+.play-slot {
+  width: var(--card-width);
+  height: var(--card-height);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: calc(-1 * var(--card-height) / 2) calc(-1 * var(--card-width) / 2);
+}
+
+/* scoreboard & footer */
+footer {
+  background: var(--hand-bg);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 800px) {
+  :root {
+    --card-width: 50px;
+    --card-height: 75px;
+  }
+  #table {
+    grid-template-areas:
+      "ai1 ai2 ai3"
+      "player center center";
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: auto 1fr;
+  }
+}
