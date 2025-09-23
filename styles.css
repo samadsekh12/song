@@ -1,11 +1,11 @@
 /* ===================================================================
-   Card Game Layout & Theming
+   Custom Properties & Theming
    =================================================================== */
-
-/* root custom properties for sizing, spacing, colors */
 :root {
   --card-width: 60px;
   --card-height: 90px;
+  --pile-card-width: 40px;
+  --pile-card-height: 60px;
   --card-spacing: 8px;
   --table-bg: #2a8fbd;
   --hand-bg: #145374;
@@ -15,7 +15,7 @@
   --transition: 0.3s ease;
 }
 
-/* reset & base */
+/* Reset & Base */
 * {
   margin: 0;
   padding: 0;
@@ -30,13 +30,25 @@ body {
   min-height: 100vh;
 }
 
-/* header and controls */
+/* Header & Controls */
 header {
   background: var(--hand-bg);
   padding: 10px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
+}
+#trumpSlot {
+  width: var(--card-width);
+  height: var(--card-height);
+  border: var(--card-border);
+  border-radius: 4px;
+  background: #fff;
+  color: #000;
+  font-size: 1.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #controls input,
 #controls button {
@@ -44,7 +56,7 @@ header {
   padding: 4px 8px;
 }
 
-/* main table layout */
+/* Main Table Layout */
 #table {
   flex: 1;
   display: grid;
@@ -56,7 +68,6 @@ header {
   gap: var(--card-spacing);
   padding: var(--card-spacing);
 }
-
 .player-area {
   background: var(--hand-bg);
   padding: var(--card-spacing);
@@ -64,26 +75,29 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  transition: box-shadow var(--transition);
+}
+.player-area.winner {
+  box-shadow: 0 0 8px var(--highlight);
 }
 
-#ai1 { grid-area: ai1; }
-#ai2 { grid-area: ai2; }
-#ai3 { grid-area: ai3; }
-#center { grid-area: center; position: relative; }
-
-/* hands */
+/* Hand & Pile */
 .hand {
   display: flex;
   flex-wrap: wrap;
   gap: var(--card-spacing);
   justify-content: center;
-  background: var(--hand-bg);
-  padding: var(--card-spacing);
-  border-radius: 4px;
   min-height: var(--card-height);
 }
+.pile {
+  display: flex;
+  gap: var(--card-spacing);
+  margin: 6px 0;
+  min-height: var(--pile-card-height);
+}
 
-/* card styling */
+/* Card Styling */
 .card {
   width: var(--card-width);
   height: var(--card-height);
@@ -99,39 +113,42 @@ header {
   transition: transform var(--transition),
               box-shadow var(--transition);
 }
+.card.small {
+  width: var(--pile-card-width);
+  height: var(--pile-card-height);
+}
 .card.draggable {
   cursor: grab;
-}
-.card:focus {
-  outline: 2px solid var(--highlight);
 }
 .card.highlight {
   box-shadow: 0 0 6px var(--highlight);
 }
+.card:focus {
+  outline: 2px solid var(--highlight);
+}
 
-/* info areas */
+/* Center Pile */
+#center {
+  grid-area: center;
+  position: relative;
+  overflow: visible;
+}
+#center .card {
+  position: absolute;
+  transition: transform var(--transition), opacity var(--transition);
+}
+#center .card:nth-child(1) { transform: translate(-60px,-20px) rotate(-30deg); }
+#center .card:nth-child(2) { transform: translate(0,-40px) rotate(0deg); }
+#center .card:nth-child(3) { transform: translate(60px,-20px) rotate(30deg); }
+#center .card:nth-child(4) { transform: translate(0,20px) rotate(0deg); }
+
+/* Info & Scoreboard */
 .info {
   margin-top: 6px;
   display: flex;
   gap: 8px;
   font-size: 0.9em;
 }
-
-/* center play area animations */
-#center .card {
-  position: absolute;
-  transition: transform var(--transition), opacity var(--transition);
-}
-.play-slot {
-  width: var(--card-width);
-  height: var(--card-height);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: calc(-1 * var(--card-height) / 2) calc(-1 * var(--card-width) / 2);
-}
-
-/* scoreboard & footer */
 footer {
   background: var(--hand-bg);
   padding: 10px;
@@ -139,12 +156,13 @@ footer {
   justify-content: space-between;
 }
 
-
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 800px) {
   :root {
     --card-width: 50px;
     --card-height: 75px;
+    --pile-card-width: 30px;
+    --pile-card-height: 45px;
   }
   #table {
     grid-template-areas:
