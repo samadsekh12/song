@@ -1,87 +1,250 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>Call Break Offline</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>All-in-One Brightness Controller</title>
+  <style>
+    :root {
+      --brightness: 1;  /* for Filter mode: 0.5–1.5 */
+      --dim: 0;         /* for Overlay mode: 0–0.8 */
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: url('https://picsum.photos/1200/800') center/cover no-repeat fixed;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+      transition: filter 200ms ease;
+      filter: brightness(var(--brightness));
+      position: relative;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,var(--dim));
+      pointer-events: none;
+      transition: background 200ms ease;
+    }
+    .panel {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(6px);
+      color: #fff;
+      padding: 14px 16px;
+      border-radius: 14px;
+      display: grid;
+      grid-template-columns: auto auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      width: min(720px, 92vw);
+    }
+    .mode {
+      display: inline-flex;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .mode button {
+      appearance: none;
+      border: none;
+      padding: 8px 12px;
+      color: #fff;
+      background: transparent;
+      cursor: pointer;
+    }
+    .mode button.active {
+      background: rgba(255,255,255,0.15);
+    }
+    .slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    input[type="range"] {
+      width: 100%;
+    }
+    .value { min-width: 64px; text-align: right; }
+    .actions { display: inline-flex; gap: 8px; }
+    .btn {
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      cursor: pointer;
+    }
+    .helper {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.45);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+    a.link { color: #ffd966; text-decoration: underline; }
+  </style>
 </head>
 <body>
-  <header role="banner">
-    <h1>Call Break</h1>
-    <div id="trumpSlot" role="region" aria-label="Trump suit">♠</div>
-    <div id="controls" role="region" aria-label="Game controls">
-      <label for="bidInput">Your Bid:</label>
-      <input
-        type="number"
-        id="bidInput"
-        min="0"
-        max="13"
-        value="0"
-        aria-label="Enter your bid between 0 and 13"
-      />
-      <button id="submitBid" aria-label="Submit your bid">Submit Bid</button>
-      <button id="nextRound" disabled aria-label="Next round">Next Round</button>
-      <button id="resetHistory" aria-label="Reset history">Reset History</button>
+  <div class="overlay" id="overlay"></div>
+
+  <h1>All-in-One Brightness Controller</h1>
+  <p class="helper">Use – / + to adjust. This changes only the webpage, not your system screen brightness.</p>
+
+  <div class="panel" role="group" aria-label="Brightness controls">
+    <div class="mode" aria-label="Mode toggle">
+      <button id="btnFilter" class="active" aria-pressed="true">Filter</button>
+      <button id="btnOverlay" aria-pressed="false">Overlay</button>
     </div>
-  </header>
 
-  <main role="main">
-    <section id="table" role="region" aria-label="Game table">
-      <!-- AI Player 1 -->
-      <div class="player-area" id="ai1" data-player="1" aria-label="AI Player 1">
-        <div class="hand"></div>
-        <div class="pile" aria-label="Won tricks pile"></div>
-        <div class="info">
-          <span class="bid">Bid: –</span>
-          <span class="tricks">Tricks: 0</span>
-          <span class="score">Score: 0</span>
-        </div>
-      </div>
+    <div class="slider-wrap" style="grid-column: span 2;">
+      <label for="level" id="label">Brightness</label>
+      <input id="level" type="range" min="50" max="150" value="100" aria-labelledby="label" />
+      <span class="value" id="val">100%</span>
+    </div>
 
-      <!-- AI Player 2 -->
-      <div class="player-area" id="ai2" data-player="2" aria-label="AI Player 2">
-        <div class="hand"></div>
-        <div class="pile" aria-label="Won tricks pile"></div>
-        <div class="info">
-          <span class="bid">Bid: –</span>
-          <span class="tricks">Tricks: 0</span>
-          <span class="score">Score: 0</span>
-        </div>
-      </div>
+    <div class="actions">
+      <button class="btn" id="reset">Reset</button>
+      <button class="btn" id="info">Help</button>
+    </div>
+  </div>
 
-      <!-- Center pile -->
-      <div id="center" role="region" aria-label="Center pile"></div>
+  <script>
+    // Keys and defaults
+    const MODE_KEY = 'brightnessMode'; // 'filter' or 'overlay'
+    const FILTER_KEY = 'brightnessPercent'; // 50–150
+    const OVERLAY_KEY = 'dimPercent';      // 0–80
 
-      <!-- AI Player 3 -->
-      <div class="player-area" id="ai3" data-player="3" aria-label="AI Player 3">
-        <div class="hand"></div>
-        <div class="pile" aria-label="Won tricks pile"></div>
-        <div class="info">
-          <span class="bid">Bid: –</span>
-          <span class="tricks">Tricks: 0</span>
-          <span class="score">Score: 0</span>
-        </div>
-      </div>
+    const btnFilter = document.getElementById('btnFilter');
+    const btnOverlay = document.getElementById('btnOverlay');
+    const slider = document.getElementById('level');
+    const val = document.getElementById('val');
+    const label = document.getElementById('label');
+    const overlay = document.getElementById('overlay');
+    const resetBtn = document.getElementById('reset');
+    const infoBtn = document.getElementById('info');
 
-      <!-- Human Player -->
-      <div class="player-area" id="player" data-player="0" aria-label="You">
-        <div class="hand" id="playerHand" role="region" aria-label="Your hand"></div>
-        <div class="pile" aria-label="Your won tricks pile"></div>
-        <div class="info">
-          <span class="bid">Bid: –</span>
-          <span class="tricks">Tricks: 0</span>
-          <span class="score">Score: 0</span>
-        </div>
-      </div>
-    </section>
-  </main>
+    // State
+    let mode = localStorage.getItem(MODE_KEY) || 'filter';
 
-  <footer>
-    <div id="scoreboard" role="region" aria-label="Scoreboard"></div>
-    <div id="roundInfo" role="status" aria-live="polite"></div>
-  </footer>
+    // Initialize UI
+    applyMode(mode);
+    loadValue();
 
-  <script type="module" src="script.js"></script>
+    // Mode toggle handlers
+    btnFilter.addEventListener('click', () => setMode('filter'));
+    btnOverlay.addEventListener('click', () => setMode('overlay'));
+
+    function setMode(next) {
+      mode = next;
+      localStorage.setItem(MODE_KEY, mode);
+      applyMode(mode);
+      loadValue();
+    }
+
+    function applyMode(m) {
+      const isFilter = m === 'filter';
+      btnFilter.classList.toggle('active', isFilter);
+      btnOverlay.classList.toggle('active', !isFilter);
+      btnFilter.setAttribute('aria-pressed', String(isFilter));
+      btnOverlay.setAttribute('aria-pressed', String(!isFilter));
+
+      if (isFilter) {
+        label.textContent = 'Brightness';
+        slider.min = 50; slider.max = 150;
+        document.body.style.filter = `brightness(var(--brightness))`;
+        overlay.style.display = 'none';
+      } else {
+        label.textContent = 'Dim level';
+        slider.min = 0; slider.max = 80;
+        overlay.style.display = 'block';
+      }
+    }
+
+    function loadValue() {
+      if (mode === 'filter') {
+        const saved = parseInt(localStorage.getItem(FILTER_KEY) || '100', 10);
+        slider.value = saved;
+        document.documentElement.style.setProperty('--brightness', saved / 100);
+        val.textContent = `${saved}%`;
+      } else {
+        const saved = parseInt(localStorage.getItem(OVERLAY_KEY) || '0', 10);
+        slider.value = saved;
+        document.documentElement.style.setProperty('--dim', saved / 100);
+        val.textContent = `${saved}%`;
+      }
+    }
+
+    // Slider updates
+    slider.addEventListener('input', () => {
+      const percent = parseInt(slider.value, 10);
+      val.textContent = `${percent}%`;
+      if (mode === 'filter') {
+        document.documentElement.style.setProperty('--brightness', percent / 100);
+        localStorage.setItem(FILTER_KEY, String(percent));
+      } else {
+        document.documentElement.style.setProperty('--dim', percent / 100);
+        localStorage.setItem(OVERLAY_KEY, String(percent));
+      }
+    });
+
+    // Keyboard shortcuts: – / +
+    document.addEventListener('keydown', (e) => {
+      const step = 5; // 5%
+      if (e.key === '-' || e.key === '_') adjust(-step);
+      if (e.key === '=' || e.key === '+') adjust(step);
+    });
+
+    function adjust(delta) {
+      const min = parseInt(slider.min, 10);
+      const max = parseInt(slider.max, 10);
+      let current = parseInt(slider.value, 10);
+      current = Math.min(max, Math.max(min, current + delta));
+      slider.value = current;
+      val.textContent = `${current}%`;
+      if (mode === 'filter') {
+        document.documentElement.style.setProperty('--brightness', current / 100);
+        localStorage.setItem(FILTER_KEY, String(current));
+      } else {
+        document.documentElement.style.setProperty('--dim', current / 100);
+        localStorage.setItem(OVERLAY_KEY, String(current));
+      }
+    }
+
+    // Reset
+    resetBtn.addEventListener('click', () => {
+      if (mode === 'filter') {
+        slider.value = 100;
+        document.documentElement.style.setProperty('--brightness', 1);
+        localStorage.setItem(FILTER_KEY, '100');
+        val.textContent = '100%';
+      } else {
+        slider.value = 0;
+        document.documentElement.style.setProperty('--dim', 0);
+        localStorage.setItem(OVERLAY_KEY, '0');
+        val.textContent = '0%';
+      }
+    });
+
+    // Help
+    infoBtn.addEventListener('click', () => {
+      alert(
+        'Modes:\n' +
+        '- Filter: CSS brightness filter (50–150%)\n' +
+        '- Overlay: Dark overlay (0–80%)\n\n' +
+        'Shortcuts: – to decrease, + to increase.\n' +
+        'Note: This only affects the webpage appearance, not your monitor/system brightness.'
+      );
+    });
+  </script>
 </body>
 </html>
