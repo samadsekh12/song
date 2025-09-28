@@ -1,250 +1,141 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>All-in-One Brightness Controller</title>
+  <meta charset="utf-8" />
+  <title>দৈনিক আমল চার্ট — আরবি ও বাংলা উচ্চারণ</title>
   <style>
-    :root {
-      --brightness: 1;  /* for Filter mode: 0.5–1.5 */
-      --dim: 0;         /* for Overlay mode: 0–0.8 */
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: url('https://picsum.photos/1200/800') center/cover no-repeat fixed;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      color: white;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
-      transition: filter 200ms ease;
-      filter: brightness(var(--brightness));
-      position: relative;
-    }
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,var(--dim));
-      pointer-events: none;
-      transition: background 200ms ease;
-    }
-    .panel {
-      position: fixed;
-      left: 50%;
-      bottom: 20px;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(6px);
-      color: #fff;
-      padding: 14px 16px;
-      border-radius: 14px;
-      display: grid;
-      grid-template-columns: auto auto 1fr auto;
-      gap: 12px;
-      align-items: center;
-      width: min(720px, 92vw);
-    }
-    .mode {
-      display: inline-flex;
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .mode button {
-      appearance: none;
-      border: none;
-      padding: 8px 12px;
-      color: #fff;
-      background: transparent;
-      cursor: pointer;
-    }
-    .mode button.active {
-      background: rgba(255,255,255,0.15);
-    }
-    .slider-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    input[type="range"] {
-      width: 100%;
-    }
-    .value { min-width: 64px; text-align: right; }
-    .actions { display: inline-flex; gap: 8px; }
-    .btn {
-      padding: 8px 10px;
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 10px;
-      background: rgba(255,255,255,0.12);
-      color: #fff;
-      cursor: pointer;
-    }
-    .helper {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.45);
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-size: 14px;
-    }
-    a.link { color: #ffd966; text-decoration: underline; }
+    body { font-family: "Noto Sans Bengali","SolaimanLipi","Nikosh",Arial,sans-serif; background:#f8fafb; color:#0f172a; line-height:1.7; margin:0; }
+    header { background:#0ea5e9; color:white; padding:20px; text-align:center; }
+    main { padding:20px; max-width:1000px; margin:auto; }
+    section { background:white; border:1px solid #e5e7eb; border-radius:12px; padding:16px; margin-bottom:16px; }
+    h2 { margin-top:0; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:16px; }
+    .arabic { font-family:"Amiri","Scheherazade","Noto Naskh Arabic",serif; font-size:1.2rem; direction:rtl; text-align:right; }
+    .translit { font-size:1.05rem; white-space:pre-line; }
   </style>
 </head>
 <body>
-  <div class="overlay" id="overlay"></div>
+  <header>
+    <h1>দৈনিক আমল চার্ট</h1>
+    <p>আরবি হরফ ও বাংলা উচ্চারণ</p>
+  </header>
+  <main>
 
-  <h1>All-in-One Brightness Controller</h1>
-  <p class="helper">Use – / + to adjust. This changes only the webpage, not your system screen brightness.</p>
+    <!-- Surah Ikhlas -->
+    <section>
+      <h2>সূরা ইখলাস (১১২)</h2>
+      <div class="grid">
+        <div class="card arabic">
+بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br/>
+قُلْ هُوَ اللَّهُ أَحَدٌ<br/>
+اللَّهُ الصَّمَدُ<br/>
+لَمْ يَلِدْ وَلَمْ يُولَدْ<br/>
+وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ
+        </div>
+        <div class="card translit">
+বিসমিল্লাহির রাহমানির রাহিম  
+কুল হুয়াল্লাহু আহাদ।  
+আল্লাহুস সামাদ।  
+লাম ইয়ালিদ ওয়া লাম ইউলাদ।  
+ওয়া লাম ইয়াকুল্লাহু কুফুওয়ান আহাদ।  
+        </div>
+      </div>
+    </section>
 
-  <div class="panel" role="group" aria-label="Brightness controls">
-    <div class="mode" aria-label="Mode toggle">
-      <button id="btnFilter" class="active" aria-pressed="true">Filter</button>
-      <button id="btnOverlay" aria-pressed="false">Overlay</button>
-    </div>
+    <!-- Surah Falaq -->
+    <section>
+      <h2>সূরা ফালাক (১১৩)</h2>
+      <div class="grid">
+        <div class="card arabic">
+بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br/>
+قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ<br/>
+مِن شَرِّ مَا خَلَقَ<br/>
+وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ<br/>
+وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ<br/>
+وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ
+        </div>
+        <div class="card translit">
+বিসমিল্লাহির রাহমানির রাহিম  
+কুল আউযু বিরাব্বিল ফালাক।  
+মিন শাররি মা খালাক।  
+ওয়া মিন শাররি গা-সিক্বিন ইযা ওয়াক্বাব।  
+ওয়া মিন শাররিন নাফফাসাতি ফিল উক্বাদ।  
+ওয়া মিন শাররি হাসিদিন ইযা হাসাদ।  
+        </div>
+      </div>
+    </section>
 
-    <div class="slider-wrap" style="grid-column: span 2;">
-      <label for="level" id="label">Brightness</label>
-      <input id="level" type="range" min="50" max="150" value="100" aria-labelledby="label" />
-      <span class="value" id="val">100%</span>
-    </div>
+    <!-- Surah Nas -->
+    <section>
+      <h2>সূরা নাস (১১৪)</h2>
+      <div class="grid">
+        <div class="card arabic">
+بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br/>
+قُلْ أَعُوذُ بِرَبِّ النَّاسِ<br/>
+مَلِكِ النَّاسِ<br/>
+إِلَٰهِ النَّاسِ<br/>
+مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ<br/>
+الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ<br/>
+مِنَ الْجِنَّةِ وَالنَّاسِ
+        </div>
+        <div class="card translit">
+বিসমিল্লাহির রাহমানির রাহিম  
+কুল আউযু বিরাব্বিন্নাস।  
+মালিকিন্নাস।  
+ইলাহিন্নাস।  
+মিন শাররিল ওয়াসওয়াসিল খান্নাস।  
+আল্লাজি ইউওয়াসউইসু ফি সুদূরিন্নাস।  
+মিনাল জিন্নাতি ওয়ান্নাস।  
+        </div>
+      </div>
+    </section>
 
-    <div class="actions">
-      <button class="btn" id="reset">Reset</button>
-      <button class="btn" id="info">Help</button>
-    </div>
-  </div>
+    <!-- Ayat al-Kursi -->
+    <section>
+      <h2>আয়াতুল কুরসি (সূরা বাকারা ২:২৫৫)</h2>
+      <div class="grid">
+        <div class="card arabic">
+اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ ... وَهُوَ الْعَلِيُّ الْعَظِيمُ
+        </div>
+        <div class="card translit">
+আল্লাহু লা ইলাহা ইল্লা হুয়াল হাইয়ুল ক্বাইয়ূম।  
+লা তা’খুজুহু সিনাতুওঁ ওয়ালা নাওম।  
+লাহু মা ফিস সামাওয়াতি ওয়া মা ফিল আরদ।  
+মান যাল্লাজি ইয়াশফাউ ইন্দাহু ইল্লা বিইজনিহি।  
+ইয়ালামু মা বাইনা আইদিহিম ওয়া মা খলফাহুম।  
+ওয়ালা ইউহিতূনা বিশাইইম মিন ইলমিহি ইল্লা বিমা শা’আ।  
+ওয়াসিআ কুরসিইয়্যুহুস সামাওয়াতি ওয়াল আরদ।  
+ওয়ালা ইয়াউদুহু হিফযুহুমা।  
+ওয়া হুয়াল আলিয়্যুল আযিম।  
+        </div>
+      </div>
+    </section>
 
-  <script>
-    // Keys and defaults
-    const MODE_KEY = 'brightnessMode'; // 'filter' or 'overlay'
-    const FILTER_KEY = 'brightnessPercent'; // 50–150
-    const OVERLAY_KEY = 'dimPercent';      // 0–80
+    <!-- Last two ayahs of Al-Baqarah -->
+    <section>
+      <h2>সূরা বাকারা শেষের দুই আয়াত (২:২৮৫–২৮৬)</h2>
+      <div class="grid">
+        <div class="card arabic">
+آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ ... فَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ
+        </div>
+        <div class="card translit">
+আমানার রাসূলু বিমা উনযিলা ইলাইহি মির রব্বিহি ওয়াল মুমিনূন।  
+কুল্লুন আমানা বিল্লাহি ওয়া মালাইকাতিহি ওয়া কুতুবিহি ওয়া রুসুলিহি,  
+লা নুফাররিকু বাইনা আহাদিম মির রুসুলিহি।  
+ওয়া কালু সামিআনা ওয়া আতাআনা, গুফরানাকা রব্বানা ওয়া ইলাইকাল মাসীর।  
 
-    const btnFilter = document.getElementById('btnFilter');
-    const btnOverlay = document.getElementById('btnOverlay');
-    const slider = document.getElementById('level');
-    const val = document.getElementById('val');
-    const label = document.getElementById('label');
-    const overlay = document.getElementById('overlay');
-    const resetBtn = document.getElementById('reset');
-    const infoBtn = document.getElementById('info');
+লা ইউকাল্লিফুল্লাহু নাফসান ইল্লা উসআহা।  
+লাহা মা কাসাবাত ওয়া আলাইহা মাকতাসাবাত।  
+রাব্বানা লা তুআখিযনা ইন নাসিনা আও আখতা’না।  
+রাব্বানা ওয়া লা তাহমিল আলাইনা ইসরান কামা হামালতাহু আলাল্লাজিনা মিন ক্বাবলিনা।  
+রাব্বানা ওয়া লা তুহাম্মিলনা মা লা ত্বাক্বাতা লানা বিহি।  
+ওয়া’ফু আন্না, ওয়াগফির লানা, ওয়ারহামনা।  
+আন্তা মাওলানা ফানসুরনা আলাল কওমিল কাফিরীন।  
+        </div>
+      </div>
+    </section>
 
-    // State
-    let mode = localStorage.getItem(MODE_KEY) || 'filter';
-
-    // Initialize UI
-    applyMode(mode);
-    loadValue();
-
-    // Mode toggle handlers
-    btnFilter.addEventListener('click', () => setMode('filter'));
-    btnOverlay.addEventListener('click', () => setMode('overlay'));
-
-    function setMode(next) {
-      mode = next;
-      localStorage.setItem(MODE_KEY, mode);
-      applyMode(mode);
-      loadValue();
-    }
-
-    function applyMode(m) {
-      const isFilter = m === 'filter';
-      btnFilter.classList.toggle('active', isFilter);
-      btnOverlay.classList.toggle('active', !isFilter);
-      btnFilter.setAttribute('aria-pressed', String(isFilter));
-      btnOverlay.setAttribute('aria-pressed', String(!isFilter));
-
-      if (isFilter) {
-        label.textContent = 'Brightness';
-        slider.min = 50; slider.max = 150;
-        document.body.style.filter = `brightness(var(--brightness))`;
-        overlay.style.display = 'none';
-      } else {
-        label.textContent = 'Dim level';
-        slider.min = 0; slider.max = 80;
-        overlay.style.display = 'block';
-      }
-    }
-
-    function loadValue() {
-      if (mode === 'filter') {
-        const saved = parseInt(localStorage.getItem(FILTER_KEY) || '100', 10);
-        slider.value = saved;
-        document.documentElement.style.setProperty('--brightness', saved / 100);
-        val.textContent = `${saved}%`;
-      } else {
-        const saved = parseInt(localStorage.getItem(OVERLAY_KEY) || '0', 10);
-        slider.value = saved;
-        document.documentElement.style.setProperty('--dim', saved / 100);
-        val.textContent = `${saved}%`;
-      }
-    }
-
-    // Slider updates
-    slider.addEventListener('input', () => {
-      const percent = parseInt(slider.value, 10);
-      val.textContent = `${percent}%`;
-      if (mode === 'filter') {
-        document.documentElement.style.setProperty('--brightness', percent / 100);
-        localStorage.setItem(FILTER_KEY, String(percent));
-      } else {
-        document.documentElement.style.setProperty('--dim', percent / 100);
-        localStorage.setItem(OVERLAY_KEY, String(percent));
-      }
-    });
-
-    // Keyboard shortcuts: – / +
-    document.addEventListener('keydown', (e) => {
-      const step = 5; // 5%
-      if (e.key === '-' || e.key === '_') adjust(-step);
-      if (e.key === '=' || e.key === '+') adjust(step);
-    });
-
-    function adjust(delta) {
-      const min = parseInt(slider.min, 10);
-      const max = parseInt(slider.max, 10);
-      let current = parseInt(slider.value, 10);
-      current = Math.min(max, Math.max(min, current + delta));
-      slider.value = current;
-      val.textContent = `${current}%`;
-      if (mode === 'filter') {
-        document.documentElement.style.setProperty('--brightness', current / 100);
-        localStorage.setItem(FILTER_KEY, String(current));
-      } else {
-        document.documentElement.style.setProperty('--dim', current / 100);
-        localStorage.setItem(OVERLAY_KEY, String(current));
-      }
-    }
-
-    // Reset
-    resetBtn.addEventListener('click', () => {
-      if (mode === 'filter') {
-        slider.value = 100;
-        document.documentElement.style.setProperty('--brightness', 1);
-        localStorage.setItem(FILTER_KEY, '100');
-        val.textContent = '100%';
-      } else {
-        slider.value = 0;
-        document.documentElement.style.setProperty('--dim', 0);
-        localStorage.setItem(OVERLAY_KEY, '0');
-        val.textContent = '0%';
-      }
-    });
-
-    // Help
-    infoBtn.addEventListener('click', () => {
-      alert(
-        'Modes:\n' +
-        '- Filter: CSS brightness filter (50–150%)\n' +
-        '- Overlay: Dark overlay (0–80%)\n\n' +
-        'Shortcuts: – to decrease, + to increase.\n' +
-        'Note: This only affects the webpage appearance, not your monitor/system brightness.'
-      );
-    });
-  </script>
+  </main>
 </body>
 </html>
